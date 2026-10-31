@@ -4,68 +4,142 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LFT Gym App</title>
-<meta name="theme-color" content="#0f0f1a">
+<meta name="theme-color" content="#1c161a">
 <style>
 :root {
-  --bg-1: #0f0f1a;
-  --bg-2: #1a1a2e;
-  --accent: #7c5cff;
-  --accent-2: #ff5c9e;
-  --card-bg: rgba(255, 255, 255, 0.05);
-  --card-hover: rgba(255, 255, 255, 0.1);
-  --text: #ffffff;
-  --text-muted: #a0a0b8;
-  --border: rgba(255, 255, 255, 0.1);
+  /* Tumma teema (oletus) - otettu kuvistasi */
+  --bg-gradient: linear-gradient(135deg, #151114 0%, #2a1f24 100%);
+  --text-main: #ffffff;
+  --text-muted: #a39ba1;
+  --card-bg: rgba(255, 255, 255, 0.04);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --accent: #f8bbd0;
+  --accent-glow: rgba(248, 187, 208, 0.15);
+  --btn-bg: rgba(255, 255, 255, 0.08);
+  --btn-hover: rgba(255, 255, 255, 0.12);
+  --toggle-bg: rgba(255, 255, 255, 0.1);
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
+
+[data-theme="light"] {
+  /* Vaalea teema */
+  --bg-gradient: linear-gradient(135deg, #f5f5f7 0%, #ffffff 100%);
+  --text-main: #1d1d1f;
+  --text-muted: #666666;
+  --card-bg: rgba(0, 0, 0, 0.03);
+  --card-border: rgba(0, 0, 0, 0.08);
+  --accent: #d81b60;
+  --accent-glow: rgba(216, 27, 96, 0.15);
+  --btn-bg: rgba(0, 0, 0, 0.05);
+  --btn-hover: rgba(0, 0, 0, 0.08);
+  --toggle-bg: rgba(0, 0, 0, 0.05);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; transition: background-color 0.3s, color 0.3s, border-color 0.3s; }
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 100%);
-  color: var(--text);
+  background: var(--bg-gradient);
+  color: var(--text-main);
   min-height: 100vh;
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 40px 20px;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
   -webkit-font-smoothing: antialiased;
-}
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: radial-gradient(circle at 20% 20%, rgba(124, 92, 255, 0.15), transparent 50%),
-              radial-gradient(circle at 80% 80%, rgba(255, 92, 158, 0.12), transparent 50%);
-  pointer-events: none;
-  z-index: 0;
-}
-.container {
   position: relative;
-  z-index: 1;
+}
+
+/* Ylävalikko teeman vaihtoon */
+.top-nav {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 20px;
+}
+.theme-toggle {
+  background: var(--toggle-bg);
+  border: 1px solid var(--card-border);
+  color: var(--text-main);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: all 0.2s;
+}
+.theme-toggle:hover { transform: scale(1.1); }
+
+/* Pääsisältö */
+.container {
   width: 100%;
   max-width: 480px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
+  gap: 20px;
+  z-index: 1;
+}
+
+.avatar-container {
+  position: relative;
+  margin-bottom: 8px;
+}
+.avatar-container::after {
+  content: '';
+  position: absolute;
+  inset: -10px;
+  background: var(--accent);
+  filter: blur(25px);
+  opacity: 0.3;
+  border-radius: 50%;
+  z-index: -1;
 }
 .avatar {
-  width: 110px;
-  height: 110px;
-  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  border-radius: 24px; /* Kulmikkaampi, kuten sovelluksissa */
   object-fit: cover;
-  border: 3px solid transparent;
-  background: linear-gradient(var(--bg-2), var(--bg-2)) padding-box,
-              linear-gradient(135deg, var(--accent), var(--accent-2)) border-box;
-  box-shadow: 0 8px 32px rgba(124, 92, 255, 0.3);
+  border: 2px solid var(--card-border);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
-h1 { font-size: 1.6rem; font-weight: 700; letter-spacing: -0.02em; }
-.bio {
-  color: var(--text-muted);
-  font-size: 0.95rem;
-  text-align: center;
-  max-width: 320px;
-  line-height: 1.5;
+
+h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em; }
+.bio { color: var(--text-muted); font-size: 0.95rem; text-align: center; line-height: 1.5; max-width: 90%; }
+
+/* Latausnapit */
+.download-section {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
+.store-btn {
+  flex: 1;
+  background: var(--btn-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--text-main);
+  text-decoration: none;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.store-btn:hover { background: var(--btn-hover); transform: translateY(-2px); }
+.store-btn svg { height: 24px; fill: currentColor; }
+.store-btn-text { display: flex; flex-direction: column; text-align: left; line-height: 1.1; }
+.store-btn-text span:first-child { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;}
+.store-btn-text span:last-child { font-size: 1rem; font-weight: 600; }
+
+/* Linkkinapit */
 .links {
   width: 100%;
   display: flex;
@@ -79,62 +153,118 @@ h1 { font-size: 1.6rem; font-weight: 700; letter-spacing: -0.02em; }
   width: 100%;
   padding: 16px 20px;
   background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  color: var(--text);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  color: var(--text-main);
   text-decoration: none;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   -webkit-tap-highlight-color: transparent;
   font-family: inherit;
   text-align: left;
 }
 .link-btn:hover {
-  background: var(--card-hover);
-  border-color: rgba(124, 92, 255, 0.4);
+  background: var(--btn-hover);
+  border-color: var(--accent);
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(124, 92, 255, 0.15);
+  box-shadow: 0 8px 24px var(--accent-glow);
 }
 .link-btn:active { transform: translateY(0); }
-.link-icon { font-size: 1.4rem; width: 32px; text-align: center; flex-shrink: 0; }
+.link-icon { font-size: 1.3rem; width: 30px; text-align: center; flex-shrink: 0; }
 .link-label { flex: 1; }
 .link-arrow { color: var(--text-muted); transition: transform 0.2s ease; }
 .link-btn:hover .link-arrow { transform: translateX(4px); color: var(--accent); }
-footer { color: var(--text-muted); font-size: 0.8rem; margin-top: 8px; opacity: 0.6; }
+
+/* Jaa nappi */
+.share-btn {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 30px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+}
+.share-btn:hover { background: var(--accent-glow); }
+footer { color: var(--text-muted); font-size: 0.8rem; margin-top: 20px; opacity: 0.7; }
 </style>
 </head>
 <body>
+
+<div class="top-nav">
+  <button class="theme-toggle" id="themeToggle" aria-label="Vaihda teemaa">
+    <span id="themeIcon">🌙</span>
+  </button>
+</div>
+
 <div class="container">
-  <img id="avatar" class="avatar" src="" alt="LFT Logo">
+  <div class="avatar-container">
+    <!-- Vaihda tähän oma logosi, esim. "logo.jpg" -->
+    <img id="avatar" class="avatar" src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=300&auto=format&fit=crop" alt="LFT Logo">
+  </div>
   <h1 id="name"></h1>
   <p id="bio" class="bio"></p>
+
+  <!-- Latausnapit -->
+  <div class="download-section">
+    <!-- MUISTA VAIHTAA href="..." OIKEISIIN LINKEIHIN -->
+    <a href="#" class="store-btn">
+      <svg viewBox="0 0 384 512"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
+      <div class="store-btn-text">
+        <span>Lataa</span>
+        <span>App Store</span>
+      </div>
+    </a>
+    <a href="#" class="store-btn">
+      <svg viewBox="0 0 512 512"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/></svg>
+      <div class="store-btn-text">
+        <span>Hanki</span>
+        <span>Google Play</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- Linkit -->
   <div id="links" class="links"></div>
+
+  <!-- Jakonappi -->
+  <button class="share-btn" id="shareBtn">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+    Jaa sivu
+  </button>
+
   <footer id="footer"></footer>
 </div>
 
 <script>
 /* ============================================
-   ✏️ MUOKKAA TÄSTÄ – KAIKKI ASETUKSET TÄSSÄ
+   ✏️ ASETUKSET
    ============================================ */
 const CONFIG = {
   name: "LFT Gym App",
   bio: "Seuraa meitä somessa ja lue lisää sovelluksesta!",
-  // Tässä on nyt tyylikäs kuntosalikuva. Jos haluat oman logon, 
-  // voit ladata sen GitHubiin ja vaihtaa tähän tiedostonimen (esim. "logo.jpg")
   avatar: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=300&auto=format&fit=crop",
   footer: "© 2026 LFT Gym App",
-
   links: [
     {
-      label: "YouTube",
-      icon: "▶️",
-      web: "https://www.youtube.com/@Lftgymapp",
-      ios: "youtube://www.youtube.com/@Lftgymapp",
-      android: "youtube://www.youtube.com/@Lftgymapp",
-      androidPackage: "com.google.android.youtube"
+      label: "Instagram",
+      icon: "📸",
+      web: "https://www.instagram.com/getlft/",
+      ios: "instagram://user?username=getlft",
+      android: "instagram://user?username=getlft",
+      androidPackage: "com.instagram.android"
     },
     {
       label: "TikTok",
@@ -145,24 +275,23 @@ const CONFIG = {
       androidPackage: "com.zhiliaoapp.musically"
     },
     {
-      label: "Instagram",
-      icon: "📸",
-      web: "https://www.instagram.com/getlft/",
-      ios: "instagram://user?username=getlft",
-      android: "instagram://user?username=getlft",
-      androidPackage: "com.instagram.android"
+      label: "YouTube",
+      icon: "▶️",
+      web: "https://www.youtube.com/@Lftgymapp",
+      ios: "youtube://www.youtube.com/@Lftgymapp",
+      android: "youtube://www.youtube.com/@Lftgymapp",
+      androidPackage: "com.google.android.youtube"
     },
     {
       label: "App Info + Privacy Policy",
       icon: "📄",
-      // Tämä avaa aina nettisivun, koska kyseessä ei ole sovellus
       web: "https://sites.google.com/view/applft?usp=sharing"
     }
   ]
 };
 
 /* ============================================
-   ⚙️ ÄLÄ MUOKKAA TÄSTÄ ALASPÄIN
+   ⚙️ LOGIIKKA (Älä muokkaa)
    ============================================ */
 document.getElementById('avatar').src = CONFIG.avatar;
 document.getElementById('name').textContent = CONFIG.name;
@@ -173,28 +302,68 @@ const linksContainer = document.getElementById('links');
 CONFIG.links.forEach(link => {
   const btn = document.createElement('button');
   btn.className = 'link-btn';
-  btn.innerHTML = `
-    <span class="link-icon">${link.icon || '🔗'}</span>
-    <span class="link-label">${link.label}</span>
-    <span class="link-arrow">→</span>
-  `;
+  btn.innerHTML = `<span class="link-icon">${link.icon || '🔗'}</span><span class="link-label">${link.label}</span><span class="link-arrow">→</span>`;
   btn.addEventListener('click', () => openLink(link));
   linksContainer.appendChild(btn);
 });
 
+// TEEMAN VAIHTO
+const themeToggle = document.getElementById('themeToggle');
+const themeIcon = document.getElementById('themeIcon');
+const root = document.documentElement;
+
+const currentTheme = localStorage.getItem('theme') || 'dark';
+if (currentTheme === 'light') {
+  root.setAttribute('data-theme', 'light');
+  themeIcon.textContent = '☀️';
+}
+
+themeToggle.addEventListener('click', () => {
+  if (root.getAttribute('data-theme') === 'light') {
+    root.removeAttribute('data-theme');
+    localStorage.setItem('theme', 'dark');
+    themeIcon.textContent = '🌙';
+  } else {
+    root.setAttribute('data-theme', 'light');
+    localStorage.setItem('theme', 'light');
+    themeIcon.textContent = '☀️';
+  }
+});
+
+// JAKONAPPI
+document.getElementById('shareBtn').addEventListener('click', async () => {
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: CONFIG.name,
+        text: 'Tsekkaa tämä!',
+        url: window.location.href
+      });
+    } catch (err) {
+      console.log('Jakaminen peruutettu');
+    }
+  } else {
+    // Fallback: Kopioi leikepöydälle
+    navigator.clipboard.writeText(window.location.href);
+    const originalText = document.getElementById('shareBtn').innerHTML;
+    document.getElementById('shareBtn').innerHTML = '✅ Linkki kopioitu!';
+    setTimeout(() => {
+      document.getElementById('shareBtn').innerHTML = originalText;
+    }, 2000);
+  }
+});
+
+// LINKIN AVAUS LOGIIKKA
 function openLink(link) {
   const ua = navigator.userAgent || '';
-  const isIOS = /iPad|iPhone|iPod/.test(ua) ||
-                (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
   const isAndroid = /android/i.test(ua);
 
-  // Työpöytä tai ei app-schemeä → verkkosivu
   if ((!isIOS && !isAndroid) || (!link.ios && !link.android)) {
     window.open(link.web, '_blank', 'noopener');
     return;
   }
 
-  // Android: intent:// + automaattinen fallback
   if (isAndroid && link.android && link.androidPackage) {
     const scheme = link.android.split('://')[0];
     const path = link.android.replace(/^[a-z0-9]+:\/\//, '');
@@ -203,7 +372,6 @@ function openLink(link) {
     return;
   }
 
-  // iOS: custom scheme + visibility timeout
   if (isIOS && link.ios) {
     openIOSApp(link.ios, link.web);
     return;
@@ -216,12 +384,9 @@ function openIOSApp(scheme, webUrl) {
   const start = Date.now();
   let didHide = false;
   const onVisibility = () => { if (document.hidden) didHide = true; };
-
   document.addEventListener('visibilitychange', onVisibility);
   window.addEventListener('pagehide', onVisibility);
-
   window.location.href = scheme;
-
   setTimeout(() => {
     document.removeEventListener('visibilitychange', onVisibility);
     window.removeEventListener('pagehide', onVisibility);
