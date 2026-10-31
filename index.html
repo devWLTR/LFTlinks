@@ -12,6 +12,20 @@
 <meta property="og:description" content="Download the app and follow us on social media.">
 <meta property="og:image" content="app_icon.png">
 <meta name="twitter:card" content="summary">
+
+<!-- ========================================== -->
+<!-- ALOITUSNÄYTÖN ASETUKSET (PWA-asetukset)    -->
+<!-- ========================================== -->
+<!-- Ikoni kun sivu tallennetaan aloitusnäytölle -->
+<link rel="apple-touch-icon" href="app_icon.png">
+<link rel="icon" type="image/png" href="app_icon.png">
+<!-- Sallii sivun avautua koko ruudun tilassa (ilman selaimen palkkeja) -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<!-- Yläpalkin tyyli iPhonessa (sulautuu tummaan teemaan) -->
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="LFT">
+
 <script>
 /* Set the theme before first paint so the page never flashes */
 (function () {
@@ -181,7 +195,7 @@ h1 { margin-top: 16px; font-size: 1.75rem; line-height: 1.15; font-weight: 700; 
 .row .chev { width: 18px; height: 18px; fill: none; stroke: var(--muted); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; opacity: .7; transition: transform .2s ease; }
 .row:hover .chev { transform: translateX(2px); }
 
-/* Highlights (Ominaisuudet) - KORJATTU */
+/* Highlights (Ominaisuudet) */
 .rail { 
   width: 100%; 
   display: flex; 
@@ -195,7 +209,7 @@ h1 { margin-top: 16px; font-size: 1.75rem; line-height: 1.15; font-weight: 700; 
 }
 .rail::-webkit-scrollbar { display: none; }
 .feature { 
-  flex: 0 0 82%; /* Hieman leveämpi puhelimella */
+  flex: 0 0 82%;
   scroll-snap-align: start; 
   background: var(--surface); 
   box-shadow: 0 0 0 1px var(--hairline); 
@@ -322,7 +336,7 @@ const CONFIG = {
     { icon: "bolt", title: "Built for focus", text: "A simple layout that stays out of your way." }
   ],
   faq: [
-    { q: "Which devices are supported?", a: "LFT Gym App is available for selected testers for Android phones." },
+    { q: "Which devices are supported?", a: "LFT Gym App is available for iPhone and Android phones." },
     { q: "Where can I read the privacy policy?", a: "Open App info & privacy policy in the list above." },
     { q: "How can I get in touch?", a: "Send us a message on Instagram or TikTok and we will get back to you." }
   ],
