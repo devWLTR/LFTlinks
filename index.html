@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Minun Linkit</title>
+<title>LFT Links</title>
 <meta name="theme-color" content="#0f0f1a">
 <style>
 :root {
@@ -120,50 +120,35 @@ footer { color: var(--text-muted); font-size: 0.8rem; margin-top: 8px; opacity: 
    ✏️ MUOKKAA TÄSTÄ – KAIKKI ASETUKSET TÄSSÄ
    ============================================ */
 const CONFIG = {
-  name: "Nimesi",
-  bio: "Tervetuloa linkkeihini! Löydät minut alta.",
-  // Voit käyttää omaa kuvaa: laita tiedosto samaan kansioon ja kirjoita "kuva.jpg"
-  avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=YourName",
-  footer: "© 2025 Nimesi",
+  name: "LFT Gym App",
+  bio: "Seuraa meitä somessa!",
+  avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=LFT",
+  footer: "© 2025 LFT Gym App",
 
   links: [
     {
-      label: "Instagram",
-      icon: "📸",
-      web: "https://instagram.com/yourusername",
-      ios: "instagram://user?username=yourusername",
-      android: "instagram://user?username=yourusername",
-      androidPackage: "com.instagram.android"
-    },
-    {
-      label: "Spotify",
-      icon: "🎵",
-      web: "https://open.spotify.com/user/youruserid",
-      ios: "spotify://user/youruserid",
-      android: "spotify://user/youruserid",
-      androidPackage: "com.spotify.music"
-    },
-    {
       label: "YouTube",
       icon: "▶️",
-      web: "https://youtube.com/@yourchannel",
-      ios: "youtube://www.youtube.com/@yourchannel",
-      android: "youtube://www.youtube.com/@yourchannel",
+      web: "https://www.youtube.com/@Lftgymapp",
+      ios: "youtube://www.youtube.com/@Lftgymapp",
+      android: "youtube://www.youtube.com/@Lftgymapp",
       androidPackage: "com.google.android.youtube"
     },
     {
       label: "TikTok",
       icon: "🎬",
-      web: "https://tiktok.com/@yourusername",
-      ios: "snssdk1233://user/profile/yourusername",
-      android: "snssdk1233://user/profile/yourusername",
+      web: "https://www.tiktok.com/@lftgymapp",
+      ios: "snssdk1128://user/profile/lftgymapp",
+      android: "snssdk1128://user/profile/lftgymapp",
       androidPackage: "com.zhiliaoapp.musically"
     },
     {
-      label: "Verkkosivuni",
-      icon: "🌐",
-      web: "https://esimerkki.fi"
-      // Ei ios/android-kenttiä → avaa aina verkkosivun
+      label: "Instagram",
+      icon: "📸",
+      web: "https://www.instagram.com/getlft/",
+      ios: "instagram://user?username=getlft",
+      android: "instagram://user?username=getlft",
+      androidPackage: "com.instagram.android"
     }
   ]
 };
@@ -204,7 +189,7 @@ function openLink(link) {
   // Android: intent:// + automaattinen fallback
   if (isAndroid && link.android && link.androidPackage) {
     const scheme = link.android.split('://')[0];
-    const path = link.android.replace(/^[a-z]+:\/\//, '');
+    const path = link.android.replace(/^[a-z0-9]+:\/\//, '');
     const intentUrl = `intent://${path}#Intent;scheme=${scheme};package=${link.androidPackage};S.browser_fallback_url=${encodeURIComponent(link.web)};end`;
     window.location.href = intentUrl;
     return;
