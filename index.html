@@ -1,266 +1,257 @@
 <!DOCTYPE html>
-<html lang="fi">
+<html lang="fi" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>LFT Gym App</title>
-<meta name="theme-color" content="#1c161a">
+<meta name="description" content="LFT Gym App: lataa sovellus ja seuraa meitä somessa.">
+<meta name="theme-color" content="#140f12">
+<meta name="color-scheme" content="dark light">
+<meta property="og:type" content="website">
+<meta property="og:title" content="LFT Gym App">
+<meta property="og:description" content="Lataa sovellus ja seuraa meitä somessa.">
+<meta property="og:image" content="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=600&auto=format&fit=crop">
+<meta name="twitter:card" content="summary">
+<script>
+/* Teema asetetaan ennen ensimmäistä piirtoa, ettei sivu välähdä */
+(function () {
+  var t = null;
+  try { t = localStorage.getItem('theme'); } catch (e) {}
+  if (t !== 'light' && t !== 'dark') {
+    t = window.matchMedia && matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  }
+  document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
 <style>
 :root {
-  /* Tumma teema (oletus) - otettu kuvistasi */
-  --bg-gradient: linear-gradient(135deg, #151114 0%, #2a1f24 100%);
-  --text-main: #ffffff;
-  --text-muted: #a39ba1;
-  --card-bg: rgba(255, 255, 255, 0.04);
-  --card-border: rgba(255, 255, 255, 0.08);
+  --bg: #140f12;
+  --glow: rgba(248, 187, 208, 0.16);
+  --surface: #211a1f;
+  --surface-hover: #2a2229;
+  --hairline: rgba(255, 255, 255, 0.09);
+  --text: #f6f2f4;
+  --muted: #a8a0a6;
   --accent: #f8bbd0;
-  --accent-glow: rgba(248, 187, 208, 0.15);
-  --btn-bg: rgba(255, 255, 255, 0.08);
-  --btn-hover: rgba(255, 255, 255, 0.12);
-  --toggle-bg: rgba(255, 255, 255, 0.1);
+  --on-accent: #2a1320;
+  --cta-bg: #f6f2f4;
+  --cta-text: #140f12;
+  --focus: #f8bbd0;
+  color-scheme: dark;
 }
-
 [data-theme="light"] {
-  /* Vaalea teema */
-  --bg-gradient: linear-gradient(135deg, #f5f5f7 0%, #ffffff 100%);
-  --text-main: #1d1d1f;
-  --text-muted: #666666;
-  --card-bg: rgba(0, 0, 0, 0.03);
-  --card-border: rgba(0, 0, 0, 0.08);
-  --accent: #d81b60;
-  --accent-glow: rgba(216, 27, 96, 0.15);
-  --btn-bg: rgba(0, 0, 0, 0.05);
-  --btn-hover: rgba(0, 0, 0, 0.08);
-  --toggle-bg: rgba(0, 0, 0, 0.05);
+  --bg: #f6f4f5;
+  --glow: rgba(216, 27, 96, 0.09);
+  --surface: #ffffff;
+  --surface-hover: #f0edef;
+  --hairline: rgba(0, 0, 0, 0.09);
+  --text: #1d1b1c;
+  --muted: #6b6569;
+  --accent: #c2185b;
+  --on-accent: #ffffff;
+  --cta-bg: #1d1b1c;
+  --cta-text: #ffffff;
+  --focus: #c2185b;
+  color-scheme: light;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; transition: background-color 0.3s, color 0.3s, border-color 0.3s; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: var(--bg-gradient);
-  color: var(--text-main);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: var(--bg);
+  background-image: radial-gradient(60% 40% at 50% 0%, var(--glow), transparent 70%);
+  background-repeat: no-repeat;
+  color: var(--text);
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
+  min-height: 100dvh;
+  padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(28px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
   -webkit-font-smoothing: antialiased;
-  position: relative;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color .3s ease, color .3s ease;
 }
 
-/* Ylävalikko teeman vaihtoon */
-.top-nav {
+a, button { -webkit-tap-highlight-color: transparent; font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+
+.page {
   width: 100%;
-  max-width: 480px;
+  max-width: 440px;
+  margin: 0 auto;
   display: flex;
-  justify-content: flex-end;
-  padding-bottom: 20px;
+  flex-direction: column;
+  align-items: center;
+  animation: enter .6s cubic-bezier(.2, .7, .2, 1) both;
 }
+@keyframes enter { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+/* Teemanvaihto */
+.bar { width: 100%; display: flex; justify-content: flex-end; height: 44px; }
 .theme-toggle {
-  background: var(--toggle-bg);
-  border: 1px solid var(--card-border);
-  color: var(--text-main);
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  transition: all 0.2s;
+  width: 44px; height: 44px;
+  display: grid; place-items: center;
+  background: transparent; border: 0; border-radius: 50%;
+  color: var(--muted); cursor: pointer;
+  transition: color .2s ease, background-color .2s ease;
 }
-.theme-toggle:hover { transform: scale(1.1); }
+.theme-toggle:hover { color: var(--text); background: var(--surface); }
+.theme-toggle svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.theme-toggle .i-sun { display: none; }
+[data-theme="light"] .theme-toggle .i-sun { display: block; }
+[data-theme="light"] .theme-toggle .i-moon { display: none; }
 
-/* Pääsisältö */
-.container {
-  width: 100%;
-  max-width: 480px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  z-index: 1;
-}
-
-.avatar-container {
-  position: relative;
-  margin-bottom: 8px;
-}
-.avatar-container::after {
-  content: '';
-  position: absolute;
-  inset: -10px;
-  background: var(--accent);
-  filter: blur(25px);
-  opacity: 0.3;
-  border-radius: 50%;
-  z-index: -1;
-}
+/* Esittely */
+.hero { display: flex; flex-direction: column; align-items: center; text-align: center; padding-top: 8px; }
 .avatar {
-  width: 100px;
-  height: 100px;
-  border-radius: 24px; /* Kulmikkaampi, kuten sovelluksissa */
-  object-fit: cover;
-  border: 2px solid var(--card-border);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  width: 112px; height: 112px;
+  border-radius: 28px;
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: 0 0 0 1px var(--hairline), 0 12px 40px -8px var(--glow), 0 24px 48px -16px rgba(0, 0, 0, .4);
+  display: grid; place-items: center;
 }
+.avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.avatar.fallback { background: var(--accent); color: var(--on-accent); font-size: 1.9rem; font-weight: 800; letter-spacing: -.03em; }
 
-h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em; }
-.bio { color: var(--text-muted); font-size: 0.95rem; text-align: center; line-height: 1.5; max-width: 90%; }
+h1 { margin-top: 22px; font-size: 1.75rem; line-height: 1.15; font-weight: 700; letter-spacing: -.025em; }
+.bio { margin-top: 8px; max-width: 30ch; color: var(--muted); font-size: 1.0625rem; line-height: 1.45; text-wrap: balance; }
 
-/* Latausnapit */
-.download-section {
-  display: flex;
-  gap: 10px;
-  width: 100%;
-  margin-top: 10px;
-  margin-bottom: 10px;
+/* Latauspainikkeet */
+.stores { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 28px; }
+.store {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 56px; padding: 8px 12px;
+  background: var(--cta-bg); color: var(--cta-text);
+  border-radius: 16px; text-decoration: none;
+  transition: transform .15s ease, opacity .15s ease;
 }
-.store-btn {
-  flex: 1;
-  background: var(--btn-bg);
-  border: 1px solid var(--card-border);
-  border-radius: 14px;
-  padding: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  color: var(--text-main);
-  text-decoration: none;
-  transition: all 0.2s;
-  cursor: pointer;
-}
-.store-btn:hover { background: var(--btn-hover); transform: translateY(-2px); }
-.store-btn svg { height: 24px; fill: currentColor; }
-.store-btn-text { display: flex; flex-direction: column; text-align: left; line-height: 1.1; }
-.store-btn-text span:first-child { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;}
-.store-btn-text span:last-child { font-size: 1rem; font-weight: 600; }
+.store:hover { opacity: .92; }
+.store:active { transform: scale(.97); }
+.store svg { width: 24px; height: 24px; fill: currentColor; flex-shrink: 0; }
+.store-text { display: flex; flex-direction: column; line-height: 1.15; text-align: left; }
+.store-text small { font-size: .7rem; opacity: .7; }
+.store-text strong { font-size: 1.05rem; font-weight: 600; letter-spacing: -.01em; white-space: nowrap; }
+.store[aria-disabled="true"] { background: var(--surface); color: var(--muted); box-shadow: inset 0 0 0 1px var(--hairline); cursor: default; }
+.store[aria-disabled="true"]:active { transform: none; }
 
-/* Linkkinapit */
-.links {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+/* Linkkilista */
+.list {
+  width: 100%; list-style: none; margin-top: 28px;
+  background: var(--surface); border-radius: 20px;
+  box-shadow: 0 0 0 1px var(--hairline);
+  overflow: hidden;
 }
-.link-btn {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  width: 100%;
-  padding: 16px 20px;
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: 20px;
-  color: var(--text-main);
-  text-decoration: none;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  -webkit-tap-highlight-color: transparent;
-  font-family: inherit;
-  text-align: left;
+.list li + li { border-top: 1px solid var(--hairline); margin-left: 68px; }
+.row {
+  display: flex; align-items: center; gap: 14px;
+  min-height: 64px; padding: 10px 16px 10px 0;
+  margin-left: -68px; padding-left: 16px;
+  text-decoration: none; font-size: 1.0625rem; font-weight: 500; letter-spacing: -.01em;
+  transition: background-color .15s ease;
 }
-.link-btn:hover {
-  background: var(--btn-hover);
-  border-color: var(--accent);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px var(--accent-glow);
+.row:hover { background: var(--surface-hover); }
+.row:active { background: var(--surface-hover); filter: brightness(.96); }
+.row .tile {
+  width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
+  display: grid; place-items: center; color: #fff;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .12);
 }
-.link-btn:active { transform: translateY(0); }
-.link-icon { font-size: 1.3rem; width: 30px; text-align: center; flex-shrink: 0; }
-.link-label { flex: 1; }
-.link-arrow { color: var(--text-muted); transition: transform 0.2s ease; }
-.link-btn:hover .link-arrow { transform: translateX(4px); color: var(--accent); }
+.row .tile svg { width: 21px; height: 21px; }
+.row .label { flex: 1; }
+.row .chev { width: 18px; height: 18px; fill: none; stroke: var(--muted); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; opacity: .7; transition: transform .2s ease; }
+.row:hover .chev { transform: translateX(2px); }
 
-/* Jaa nappi */
-.share-btn {
-  margin-top: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 12px 24px;
-  background: transparent;
-  color: var(--accent);
-  border: 1px solid var(--accent);
-  border-radius: 30px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  width: 100%;
+/* Jakopainike */
+.share {
+  margin-top: 20px; min-height: 48px; padding: 0 22px;
+  display: inline-flex; align-items: center; gap: 8px;
+  background: transparent; border: 0; border-radius: 999px;
+  color: var(--accent); font-size: 1rem; font-weight: 600; letter-spacing: -.01em;
+  cursor: pointer; transition: background-color .2s ease, transform .15s ease;
 }
-.share-btn:hover { background: var(--accent-glow); }
-footer { color: var(--text-muted); font-size: 0.8rem; margin-top: 20px; opacity: 0.7; }
+.share:hover { background: var(--surface); }
+.share:active { transform: scale(.97); }
+.share svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+footer { margin-top: 24px; color: var(--muted); font-size: .8125rem; text-align: center; }
+
+.toast {
+  position: fixed; left: 50%; bottom: max(28px, env(safe-area-inset-bottom));
+  transform: translate(-50%, 12px);
+  background: var(--cta-bg); color: var(--cta-text);
+  padding: 12px 20px; border-radius: 999px;
+  font-size: .9375rem; font-weight: 600;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, .3);
+  opacity: 0; pointer-events: none;
+  transition: opacity .25s ease, transform .25s ease;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+@media (prefers-reduced-motion: reduce) {
+  .page { animation: none; }
+  *, *::before, *::after { transition-duration: .01ms !important; }
+}
 </style>
 </head>
 <body>
 
-<div class="top-nav">
-  <button class="theme-toggle" id="themeToggle" aria-label="Vaihda teemaa">
-    <span id="themeIcon">🌙</span>
-  </button>
-</div>
-
-<div class="container">
-  <div class="avatar-container">
-    <!-- Vaihda tähän oma logosi, esim. "logo.jpg" -->
-    <img id="avatar" class="avatar" src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=300&auto=format&fit=crop" alt="LFT Logo">
+<main class="page">
+  <div class="bar">
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Vaihda teemaa">
+      <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
   </div>
-  <h1 id="name"></h1>
-  <p id="bio" class="bio"></p>
 
-  <!-- Latausnapit -->
-  <div class="download-section">
-    <!-- MUISTA VAIHTAA href="..." OIKEISIIN LINKEIHIN -->
-    <a href="#" class="store-btn">
-      <svg viewBox="0 0 384 512"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
-      <div class="store-btn-text">
-        <span>Lataa</span>
-        <span>App Store</span>
-      </div>
+  <header class="hero">
+    <div class="avatar" id="avatar"><img id="avatarImg" alt="LFT-logo" width="112" height="112"></div>
+    <h1 id="name"></h1>
+    <p class="bio" id="bio"></p>
+  </header>
+
+  <div class="stores">
+    <a class="store" id="storeIos" href="#" target="_blank" rel="noopener">
+      <svg viewBox="0 0 384 512" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
+      <span class="store-text"><small>Lataa</small><strong>App Store</strong></span>
     </a>
-    <a href="#" class="store-btn">
-      <svg viewBox="0 0 512 512"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/></svg>
-      <div class="store-btn-text">
-        <span>Hanki</span>
-        <span>Google Play</span>
-      </div>
+    <a class="store" id="storeAndroid" href="#" target="_blank" rel="noopener">
+      <svg viewBox="0 0 512 512" aria-hidden="true"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/></svg>
+      <span class="store-text"><small>Hanki</small><strong>Google Play</strong></span>
     </a>
   </div>
 
-  <!-- Linkit -->
-  <div id="links" class="links"></div>
+  <ul class="list" id="links"></ul>
 
-  <!-- Jakonappi -->
-  <button class="share-btn" id="shareBtn">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+  <button class="share" id="shareBtn" type="button">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
     Jaa sivu
   </button>
 
   <footer id="footer"></footer>
-</div>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
 /* ============================================
-   ✏️ ASETUKSET
+   ASETUKSET
    ============================================ */
 const CONFIG = {
   name: "LFT Gym App",
+  monogram: "LFT",
   bio: "Seuraa meitä somessa ja lue lisää sovelluksesta!",
-  avatar: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=300&auto=format&fit=crop",
+  avatar: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=300&auto=format&fit=crop", // vaihda omaan logoon, esim. "logo.png"
   footer: "© 2026 LFT Gym App",
+  // Lisää kauppalinkit tähän. Tyhjä arvo näyttää painikkeen tilassa "Tulossa".
+  stores: {
+    ios: "",
+    android: ""
+  },
   links: [
     {
       label: "Instagram",
-      icon: "📸",
+      icon: "instagram",
       web: "https://www.instagram.com/getlft/",
       ios: "instagram://user?username=getlft",
       android: "instagram://user?username=getlft",
@@ -268,7 +259,7 @@ const CONFIG = {
     },
     {
       label: "TikTok",
-      icon: "🎬",
+      icon: "tiktok",
       web: "https://www.tiktok.com/@lftgymapp",
       ios: "snssdk1128://user/profile/lftgymapp",
       android: "snssdk1128://user/profile/lftgymapp",
@@ -276,123 +267,151 @@ const CONFIG = {
     },
     {
       label: "YouTube",
-      icon: "▶️",
+      icon: "youtube",
       web: "https://www.youtube.com/@Lftgymapp",
       ios: "youtube://www.youtube.com/@Lftgymapp",
       android: "youtube://www.youtube.com/@Lftgymapp",
       androidPackage: "com.google.android.youtube"
     },
     {
-      label: "App Info + Privacy Policy",
-      icon: "📄",
+      label: "Sovelluksen tiedot ja tietosuojaseloste",
+      icon: "info",
       web: "https://sites.google.com/view/applft?usp=sharing"
     }
   ]
 };
 
 /* ============================================
-   ⚙️ LOGIIKKA (Älä muokkaa)
+   LOGIIKKA
    ============================================ */
-document.getElementById('avatar').src = CONFIG.avatar;
-document.getElementById('name').textContent = CONFIG.name;
-document.getElementById('bio').textContent = CONFIG.bio;
-document.getElementById('footer').textContent = CONFIG.footer;
+const ICONS = {
+  instagram: { bg: "linear-gradient(45deg,#f9a03f 0%,#e1306c 50%,#833ab4 100%)",
+    svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>' },
+  tiktok: { bg: "#000",
+    svg: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.6 5.82A4.28 4.28 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6 0-1.72 1.66-3.01 3.37-2.48V9.66c-3.45-.46-6.47 2.22-6.47 5.64 0 3.33 2.76 5.7 5.69 5.7 3.14 0 5.69-2.55 5.69-5.7V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3s-1.88.09-3.24-1.48z"/></svg>' },
+  youtube: { bg: "#ff0033",
+    svg: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.6 7.2a2.5 2.5 0 0 0-1.76-1.77C18.3 5 12 5 12 5s-6.3 0-7.84.43A2.5 2.5 0 0 0 2.4 7.2C2 8.76 2 12 2 12s0 3.24.4 4.8a2.5 2.5 0 0 0 1.76 1.77C5.7 19 12 19 12 19s6.3 0 7.84-.43a2.5 2.5 0 0 0 1.76-1.77C22 15.24 22 12 22 12s0-3.24-.4-4.8zM10 15V9l5.2 3-5.2 3z"/></svg>' },
+  info: { bg: "linear-gradient(160deg,#f06292,#c2185b)",
+    svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg>' }
+};
+const CHEVRON = '<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>';
+const $ = (id) => document.getElementById(id);
 
-const linksContainer = document.getElementById('links');
-CONFIG.links.forEach(link => {
-  const btn = document.createElement('button');
-  btn.className = 'link-btn';
-  btn.innerHTML = `<span class="link-icon">${link.icon || '🔗'}</span><span class="link-label">${link.label}</span><span class="link-arrow">→</span>`;
-  btn.addEventListener('click', () => openLink(link));
-  linksContainer.appendChild(btn);
+/* Sisältö */
+$('name').textContent = CONFIG.name;
+$('bio').textContent = CONFIG.bio;
+$('footer').textContent = CONFIG.footer;
+
+const avatar = $('avatar'), avatarImg = $('avatarImg');
+avatarImg.addEventListener('error', () => {
+  avatar.classList.add('fallback');
+  avatar.textContent = CONFIG.monogram || CONFIG.name.slice(0, 3).toUpperCase();
+});
+avatarImg.src = CONFIG.avatar;
+
+/* Kauppapainikkeet */
+[['storeIos', CONFIG.stores.ios, 'Lataa'], ['storeAndroid', CONFIG.stores.android, 'Hanki']].forEach(([id, url]) => {
+  const el = $(id);
+  if (url) { el.href = url; return; }
+  el.removeAttribute('href');
+  el.removeAttribute('target');
+  el.setAttribute('aria-disabled', 'true');
+  el.querySelector('small').textContent = 'Tulossa';
 });
 
-// TEEMAN VAIHTO
-const themeToggle = document.getElementById('themeToggle');
-const themeIcon = document.getElementById('themeIcon');
-const root = document.documentElement;
+/* Linkit */
+CONFIG.links.forEach((link) => {
+  const icon = ICONS[link.icon] || ICONS.info;
+  const li = document.createElement('li');
+  const a = document.createElement('a');
+  a.className = 'row';
+  a.href = link.web;
+  a.target = '_blank';
+  a.rel = 'noopener';
+  a.innerHTML = '<span class="tile" style="background:' + icon.bg + '">' + icon.svg + '</span><span class="label"></span>' + CHEVRON;
+  a.querySelector('.label').textContent = link.label;
+  a.addEventListener('click', (e) => { if (openInApp(link)) e.preventDefault(); });
+  li.appendChild(a);
+  $('links').appendChild(li);
+});
 
-const currentTheme = localStorage.getItem('theme') || 'dark';
-if (currentTheme === 'light') {
-  root.setAttribute('data-theme', 'light');
-  themeIcon.textContent = '☀️';
+/* Teema */
+const root = document.documentElement;
+const metaTheme = document.querySelector('meta[name="theme-color"]');
+function applyTheme(t) {
+  root.setAttribute('data-theme', t);
+  if (metaTheme) metaTheme.setAttribute('content', t === 'light' ? '#f6f4f5' : '#140f12');
+}
+applyTheme(root.getAttribute('data-theme'));
+$('themeToggle').addEventListener('click', () => {
+  const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+  applyTheme(next);
+  try { localStorage.setItem('theme', next); } catch (e) {}
+});
+if (window.matchMedia) {
+  matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
+    let saved = null;
+    try { saved = localStorage.getItem('theme'); } catch (err) {}
+    if (!saved) applyTheme(e.matches ? 'light' : 'dark');
+  });
 }
 
-themeToggle.addEventListener('click', () => {
-  if (root.getAttribute('data-theme') === 'light') {
-    root.removeAttribute('data-theme');
-    localStorage.setItem('theme', 'dark');
-    themeIcon.textContent = '🌙';
-  } else {
-    root.setAttribute('data-theme', 'light');
-    localStorage.setItem('theme', 'light');
-    themeIcon.textContent = '☀️';
-  }
-});
+/* Ilmoitus */
+let toastTimer;
+function toast(msg) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
 
-// JAKONAPPI
-document.getElementById('shareBtn').addEventListener('click', async () => {
+/* Jakaminen */
+$('shareBtn').addEventListener('click', async () => {
+  const data = { title: CONFIG.name, text: CONFIG.name, url: location.href };
   if (navigator.share) {
-    try {
-      await navigator.share({
-        title: CONFIG.name,
-        text: 'Tsekkaa tämä!',
-        url: window.location.href
-      });
-    } catch (err) {
-      console.log('Jakaminen peruutettu');
-    }
-  } else {
-    // Fallback: Kopioi leikepöydälle
-    navigator.clipboard.writeText(window.location.href);
-    const originalText = document.getElementById('shareBtn').innerHTML;
-    document.getElementById('shareBtn').innerHTML = '✅ Linkki kopioitu!';
-    setTimeout(() => {
-      document.getElementById('shareBtn').innerHTML = originalText;
-    }, 2000);
+    try { await navigator.share(data); } catch (e) { /* käyttäjä peruutti */ }
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(location.href);
+    toast('Linkki kopioitu');
+  } catch (e) {
+    toast('Kopioi osoite selaimen osoiterivistä');
   }
 });
 
-// LINKIN AVAUS LOGIIKKA
-function openLink(link) {
+/* Sovelluslinkit: avaa natiivisovellus, muuten selain */
+function openInApp(link) {
   const ua = navigator.userAgent || '';
   const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
   const isAndroid = /android/i.test(ua);
 
-  if ((!isIOS && !isAndroid) || (!link.ios && !link.android)) {
-    window.open(link.web, '_blank', 'noopener');
-    return;
-  }
-
   if (isAndroid && link.android && link.androidPackage) {
     const scheme = link.android.split('://')[0];
-    const path = link.android.replace(/^[a-z0-9]+:\/\//, '');
-    const intentUrl = `intent://${path}#Intent;scheme=${scheme};package=${link.androidPackage};S.browser_fallback_url=${encodeURIComponent(link.web)};end`;
-    window.location.href = intentUrl;
-    return;
+    const path = link.android.replace(/^[a-z0-9]+:\/\//i, '');
+    location.href = 'intent://' + path + '#Intent;scheme=' + scheme + ';package=' + link.androidPackage +
+      ';S.browser_fallback_url=' + encodeURIComponent(link.web) + ';end';
+    return true;
   }
-
   if (isIOS && link.ios) {
     openIOSApp(link.ios, link.web);
-    return;
+    return true;
   }
-
-  window.open(link.web, '_blank', 'noopener');
+  return false;
 }
 
 function openIOSApp(scheme, webUrl) {
   const start = Date.now();
-  let didHide = false;
-  const onVisibility = () => { if (document.hidden) didHide = true; };
-  document.addEventListener('visibilitychange', onVisibility);
-  window.addEventListener('pagehide', onVisibility);
-  window.location.href = scheme;
+  let left = false;
+  const mark = () => { left = true; };
+  document.addEventListener('visibilitychange', mark);
+  window.addEventListener('pagehide', mark);
+  location.href = scheme;
   setTimeout(() => {
-    document.removeEventListener('visibilitychange', onVisibility);
-    window.removeEventListener('pagehide', onVisibility);
-    if (!didHide && !document.hidden && (Date.now() - start) < 2500) {
-      window.location.href = webUrl;
-    }
+    document.removeEventListener('visibilitychange', mark);
+    window.removeEventListener('pagehide', mark);
+    if (!left && !document.hidden && Date.now() - start < 2500) location.href = webUrl;
   }, 1200);
 }
 </script>
