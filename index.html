@@ -104,11 +104,11 @@ a, button { -webkit-tap-highlight-color: transparent; font: inherit; color: inhe
 /* Intro */
 .hero { display: flex; flex-direction: column; align-items: center; text-align: center; padding-top: 8px; width: 100%; }
 
-/* PÄIVITETTY BANNERI-KUVA */
+/* Bannerikuva */
 .avatar {
   width: 100%;
-  height: 200px; /* Korkeus, jotta siitä tulee kunnon banneri */
-  border-radius: 24px; /* Samat pyöristykset kuin korteissa */
+  height: 200px;
+  border-radius: 24px;
   overflow: hidden;
   background: var(--surface);
   box-shadow: 0 0 0 1px var(--hairline), 0 12px 40px -8px var(--glow), 0 24px 48px -16px rgba(0, 0, 0, .4);
@@ -117,15 +117,7 @@ a, button { -webkit-tap-highlight-color: transparent; font: inherit; color: inhe
   justify-content: center;
   position: relative;
 }
-
-.avatar img { 
-  width: 100%; 
-  height: 100%; 
-  object-fit: cover; 
-  display: block; 
-}
-
-/* Liukuväri, joka häivyttää kuvan alareunan nätisti taustaan */
+.avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .avatar::after {
   content: '';
   position: absolute;
@@ -134,14 +126,7 @@ a, button { -webkit-tap-highlight-color: transparent; font: inherit; color: inhe
   background: linear-gradient(to top, var(--bg), transparent);
   pointer-events: none;
 }
-
-.avatar.fallback { 
-  background: var(--accent); 
-  color: var(--on-accent); 
-  font-size: 2.5rem; 
-  font-weight: 800; 
-  letter-spacing: -.03em; 
-}
+.avatar.fallback { background: var(--accent); color: var(--on-accent); font-size: 2.5rem; font-weight: 800; letter-spacing: -.03em; }
 
 h1 { margin-top: 16px; font-size: 1.75rem; line-height: 1.15; font-weight: 700; letter-spacing: -.025em; }
 .bio { margin-top: 8px; max-width: 30ch; color: var(--muted); font-size: 1.0625rem; line-height: 1.45; text-wrap: balance; }
@@ -174,7 +159,10 @@ h1 { margin-top: 16px; font-size: 1.75rem; line-height: 1.15; font-weight: 700; 
   box-shadow: 0 0 0 1px var(--hairline);
   overflow: hidden;
 }
-.list li + li { border-top: 1px solid var(--hairline); margin-left: 68px; }
+/* TÄSSÄ ON KORJAUS: margin-left: 68px laitetaan kaikille listan riveille */
+.list li { margin-left: 68px; }
+.list li + li { border-top: 1px solid var(--hairline); }
+
 .row {
   display: flex; align-items: center; gap: 14px;
   min-height: 64px; padding: 10px 16px 10px 0;
@@ -294,10 +282,9 @@ const CONFIG = {
   name: "LFT Gym App",
   monogram: "LFT",
   bio: "Follow us on social media and learn more about the app!",
-  avatar: "app_icon.png", // Varmista, että tiedostonimi täsmää GitHubiin ladatun kuvan kanssa
+  avatar: "app_icon.png",
   footer: "© 2026 LFT Gym App",
-  email: "", // optional: adds a "Contact us" row, e.g. "hello@yourdomain.com"
-  // Highlights (swipeable cards). Edit the text to match your app. Icons: dumbbell, chart, timer, bolt
+  email: "",
   features: [
     { icon: "dumbbell", title: "Log every workout", text: "Record sets, reps and weights in seconds." },
     { icon: "chart", title: "See your progress", text: "Clear charts that show how you are improving." },
@@ -309,7 +296,6 @@ const CONFIG = {
     { q: "Where can I read the privacy policy?", a: "Open App info & privacy policy in the list above." },
     { q: "How can I get in touch?", a: "Send us a message on Instagram or TikTok and we will get back to you." }
   ],
-  // Add your store links here. An empty value shows the button as "Coming soon".
   stores: {
     ios: "",
     android: ""
@@ -318,10 +304,7 @@ const CONFIG = {
     {
       label: "Instagram",
       icon: "instagram",
-      web: "https://www.instagram.com/getlft/",
-      ios: "instagram://user?username=getlft",
-      android: "instagram://user?username=getlft",
-      androidPackage: "com.instagram.android"
+      web: "https://www.instagram.com/getlft/"
     },
     {
       label: "TikTok",
@@ -371,11 +354,9 @@ const FEATURE_ICONS = {
   bolt: '<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>'
 };
 
-/* Platform */
 const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent || '') || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 const isAndroid = /android/i.test(navigator.userAgent || '');
 
-/* Content */
 $('name').textContent = CONFIG.name;
 $('bio').textContent = CONFIG.bio;
 $('footer').textContent = CONFIG.footer;
@@ -387,7 +368,6 @@ avatarImg.addEventListener('error', () => {
 });
 avatarImg.src = CONFIG.avatar;
 
-/* Store buttons */
 [['storeIos', CONFIG.stores.ios], ['storeAndroid', CONFIG.stores.android]].forEach(([id, url]) => {
   const el = $(id);
   if (url) { el.href = url; return; }
@@ -397,14 +377,12 @@ avatarImg.src = CONFIG.avatar;
   el.querySelector('small').textContent = 'Coming soon';
 });
 
-/* On phones, put the matching store first */
 if (isIOS || isAndroid) {
   document.querySelector('.stores').classList.add('detected');
   $(isIOS ? 'storeIos' : 'storeAndroid').classList.add('primary');
   $(isIOS ? 'storeAndroid' : 'storeIos').classList.add('secondary');
 }
 
-/* Highlights */
 CONFIG.features.forEach((f) => {
   const card = document.createElement('article');
   card.className = 'feature';
@@ -414,7 +392,6 @@ CONFIG.features.forEach((f) => {
   $('features').appendChild(card);
 });
 
-/* FAQ */
 CONFIG.faq.forEach((item) => {
   const d = document.createElement('details');
   d.innerHTML = '<summary><span></span>' + CHEVRON + '</summary><p></p>';
@@ -423,7 +400,6 @@ CONFIG.faq.forEach((item) => {
   $('faq').appendChild(d);
 });
 
-/* Links */
 if (CONFIG.email) CONFIG.links.push({ label: "Contact us", icon: "mail", web: "mailto:" + CONFIG.email });
 CONFIG.links.forEach((link) => {
   const icon = ICONS[link.icon] || ICONS.info;
@@ -439,7 +415,6 @@ CONFIG.links.forEach((link) => {
   $('links').appendChild(li);
 });
 
-/* Theme */
 const root = document.documentElement;
 const metaTheme = document.querySelector('meta[name="theme-color"]');
 function applyTheme(t) {
@@ -460,7 +435,6 @@ if (window.matchMedia) {
   });
 }
 
-/* Toast */
 let toastTimer;
 function toast(msg) {
   const t = $('toast');
@@ -470,7 +444,6 @@ function toast(msg) {
   toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
 }
 
-/* Sharing */
 $('shareBtn').addEventListener('click', async () => {
   const data = { title: CONFIG.name, text: CONFIG.name, url: location.href };
   if (navigator.share) {
@@ -485,7 +458,6 @@ $('shareBtn').addEventListener('click', async () => {
   }
 });
 
-/* App links: open the native app, otherwise the browser */
 function openInApp(link) {
   if (isAndroid && link.android && link.androidPackage) {
     const scheme = link.android.split('://')[0];
