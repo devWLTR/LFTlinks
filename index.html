@@ -159,7 +159,6 @@ h1 { margin-top: 16px; font-size: 1.75rem; line-height: 1.15; font-weight: 700; 
   box-shadow: 0 0 0 1px var(--hairline);
   overflow: hidden;
 }
-/* TÄSSÄ ON KORJAUS: margin-left: 68px laitetaan kaikille listan riveille */
 .list li { margin-left: 68px; }
 .list li + li { border-top: 1px solid var(--hairline); }
 
@@ -182,13 +181,44 @@ h1 { margin-top: 16px; font-size: 1.75rem; line-height: 1.15; font-weight: 700; 
 .row .chev { width: 18px; height: 18px; fill: none; stroke: var(--muted); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; opacity: .7; transition: transform .2s ease; }
 .row:hover .chev { transform: translateX(2px); }
 
-/* Highlights */
-.rail { width: 100%; display: flex; gap: 10px; margin-top: 28px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+/* Highlights (Ominaisuudet) - KORJATTU */
+.rail { 
+  width: 100%; 
+  display: flex; 
+  gap: 12px; 
+  margin-top: 28px; 
+  overflow-x: auto; 
+  scroll-snap-type: x mandatory; 
+  scrollbar-width: none; 
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 4px;
+}
 .rail::-webkit-scrollbar { display: none; }
-.feature { flex: 0 0 64%; scroll-snap-align: start; background: var(--surface); box-shadow: 0 0 0 1px var(--hairline); border-radius: 20px; padding: 18px; }
+.feature { 
+  flex: 0 0 82%; /* Hieman leveämpi puhelimella */
+  scroll-snap-align: start; 
+  background: var(--surface); 
+  box-shadow: 0 0 0 1px var(--hairline); 
+  border-radius: 20px; 
+  padding: 18px; 
+}
 .feature svg { width: 26px; height: 26px; fill: none; stroke: var(--accent); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .feature h3 { margin-top: 14px; font-size: 1.0625rem; font-weight: 600; letter-spacing: -.01em; }
 .feature p { margin-top: 4px; color: var(--muted); font-size: .9375rem; line-height: 1.4; }
+
+/* Tietokoneella: Muutetaan 2x2 ruudukoksi, ei vieritystä */
+@media (min-width: 500px) {
+  .rail {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow-x: visible;
+    scroll-snap-type: none;
+    padding-bottom: 0;
+  }
+  .feature {
+    flex: none;
+  }
+}
 
 /* FAQ */
 .faq { width: 100%; margin-top: 28px; background: var(--surface); border-radius: 20px; box-shadow: 0 0 0 1px var(--hairline); overflow: hidden; }
