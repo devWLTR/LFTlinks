@@ -10,7 +10,7 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="LFT Gym App">
 <meta property="og:description" content="Download the app and follow us on social media.">
-<meta property="og:image" content="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=600&auto=format&fit=crop">
+<meta property="og:image" content="app_icon.png">
 <meta name="twitter:card" content="summary">
 <script>
 /* Set the theme before first paint so the page never flashes */
@@ -102,19 +102,48 @@ a, button { -webkit-tap-highlight-color: transparent; font: inherit; color: inhe
 [data-theme="light"] .theme-toggle .i-moon { display: none; }
 
 /* Intro */
-.hero { display: flex; flex-direction: column; align-items: center; text-align: center; padding-top: 8px; }
+.hero { display: flex; flex-direction: column; align-items: center; text-align: center; padding-top: 8px; width: 100%; }
+
+/* PÄIVITETTY BANNERI-KUVA */
 .avatar {
-  width: 112px; height: 112px;
-  border-radius: 28px;
+  width: 100%;
+  height: 200px; /* Korkeus, jotta siitä tulee kunnon banneri */
+  border-radius: 24px; /* Samat pyöristykset kuin korteissa */
   overflow: hidden;
   background: var(--surface);
   box-shadow: 0 0 0 1px var(--hairline), 0 12px 40px -8px var(--glow), 0 24px 48px -16px rgba(0, 0, 0, .4);
-  display: grid; place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
-.avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.avatar.fallback { background: var(--accent); color: var(--on-accent); font-size: 1.9rem; font-weight: 800; letter-spacing: -.03em; }
 
-h1 { margin-top: 22px; font-size: 1.75rem; line-height: 1.15; font-weight: 700; letter-spacing: -.025em; }
+.avatar img { 
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; 
+  display: block; 
+}
+
+/* Liukuväri, joka häivyttää kuvan alareunan nätisti taustaan */
+.avatar::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 40%;
+  background: linear-gradient(to top, var(--bg), transparent);
+  pointer-events: none;
+}
+
+.avatar.fallback { 
+  background: var(--accent); 
+  color: var(--on-accent); 
+  font-size: 2.5rem; 
+  font-weight: 800; 
+  letter-spacing: -.03em; 
+}
+
+h1 { margin-top: 16px; font-size: 1.75rem; line-height: 1.15; font-weight: 700; letter-spacing: -.025em; }
 .bio { margin-top: 8px; max-width: 30ch; color: var(--muted); font-size: 1.0625rem; line-height: 1.45; text-wrap: balance; }
 
 /* Store buttons */
@@ -225,7 +254,7 @@ footer { margin-top: 24px; color: var(--muted); font-size: .8125rem; text-align:
   </div>
 
   <header class="hero">
-    <div class="avatar" id="avatar"><img id="avatarImg" alt="LFT logo" width="112" height="112"></div>
+    <div class="avatar" id="avatar"><img id="avatarImg" alt="LFT logo" width="100%" height="100%"></div>
     <h1 id="name"></h1>
     <p class="bio" id="bio"></p>
   </header>
@@ -265,7 +294,7 @@ const CONFIG = {
   name: "LFT Gym App",
   monogram: "LFT",
   bio: "Follow us on social media and learn more about the app!",
-  avatar: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=300&auto=format&fit=crop", // replace with your own logo, e.g. "logo.png"
+  avatar: "app_icon.png", // Varmista, että tiedostonimi täsmää GitHubiin ladatun kuvan kanssa
   footer: "© 2026 LFT Gym App",
   email: "", // optional: adds a "Contact us" row, e.g. "hello@yourdomain.com"
   // Highlights (swipeable cards). Edit the text to match your app. Icons: dumbbell, chart, timer, bolt
