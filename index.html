@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html lang="fi" data-theme="dark">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>LFT Gym App</title>
-<meta name="description" content="LFT Gym App: lataa sovellus ja seuraa meitä somessa.">
+<meta name="description" content="LFT Gym App: download the app and follow us on social media.">
 <meta name="theme-color" content="#140f12">
 <meta name="color-scheme" content="dark light">
 <meta property="og:type" content="website">
 <meta property="og:title" content="LFT Gym App">
-<meta property="og:description" content="Lataa sovellus ja seuraa meitä somessa.">
+<meta property="og:description" content="Download the app and follow us on social media.">
 <meta property="og:image" content="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=600&auto=format&fit=crop">
 <meta name="twitter:card" content="summary">
 <script>
-/* Teema asetetaan ennen ensimmäistä piirtoa, ettei sivu välähdä */
+/* Set the theme before first paint so the page never flashes */
 (function () {
   var t = null;
   try { t = localStorage.getItem('theme'); } catch (e) {}
@@ -86,7 +86,7 @@ a, button { -webkit-tap-highlight-color: transparent; font: inherit; color: inhe
 }
 @keyframes enter { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 
-/* Teemanvaihto */
+/* Theme toggle */
 .bar { width: 100%; display: flex; justify-content: flex-end; height: 44px; }
 .theme-toggle {
   width: 44px; height: 44px;
@@ -101,7 +101,7 @@ a, button { -webkit-tap-highlight-color: transparent; font: inherit; color: inhe
 [data-theme="light"] .theme-toggle .i-sun { display: block; }
 [data-theme="light"] .theme-toggle .i-moon { display: none; }
 
-/* Esittely */
+/* Intro */
 .hero { display: flex; flex-direction: column; align-items: center; text-align: center; padding-top: 8px; }
 .avatar {
   width: 112px; height: 112px;
@@ -117,7 +117,7 @@ a, button { -webkit-tap-highlight-color: transparent; font: inherit; color: inhe
 h1 { margin-top: 22px; font-size: 1.75rem; line-height: 1.15; font-weight: 700; letter-spacing: -.025em; }
 .bio { margin-top: 8px; max-width: 30ch; color: var(--muted); font-size: 1.0625rem; line-height: 1.45; text-wrap: balance; }
 
-/* Latauspainikkeet */
+/* Store buttons */
 .stores { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 28px; }
 .store {
   display: flex; align-items: center; justify-content: center; gap: 10px;
@@ -132,10 +132,13 @@ h1 { margin-top: 22px; font-size: 1.75rem; line-height: 1.15; font-weight: 700; 
 .store-text { display: flex; flex-direction: column; line-height: 1.15; text-align: left; }
 .store-text small { font-size: .7rem; opacity: .7; }
 .store-text strong { font-size: 1.05rem; font-weight: 600; letter-spacing: -.01em; white-space: nowrap; }
+.stores .store.primary { order: -1; }
+.stores.detected .store { grid-column: 1 / -1; }
+.stores.detected .store.secondary { background: var(--surface); color: var(--text); box-shadow: inset 0 0 0 1px var(--hairline); min-height: 48px; }
 .store[aria-disabled="true"] { background: var(--surface); color: var(--muted); box-shadow: inset 0 0 0 1px var(--hairline); cursor: default; }
 .store[aria-disabled="true"]:active { transform: none; }
 
-/* Linkkilista */
+/* Link list */
 .list {
   width: 100%; list-style: none; margin-top: 28px;
   background: var(--surface); border-radius: 20px;
@@ -162,7 +165,24 @@ h1 { margin-top: 22px; font-size: 1.75rem; line-height: 1.15; font-weight: 700; 
 .row .chev { width: 18px; height: 18px; fill: none; stroke: var(--muted); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; opacity: .7; transition: transform .2s ease; }
 .row:hover .chev { transform: translateX(2px); }
 
-/* Jakopainike */
+/* Highlights */
+.rail { width: 100%; display: flex; gap: 10px; margin-top: 28px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.rail::-webkit-scrollbar { display: none; }
+.feature { flex: 0 0 64%; scroll-snap-align: start; background: var(--surface); box-shadow: 0 0 0 1px var(--hairline); border-radius: 20px; padding: 18px; }
+.feature svg { width: 26px; height: 26px; fill: none; stroke: var(--accent); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.feature h3 { margin-top: 14px; font-size: 1.0625rem; font-weight: 600; letter-spacing: -.01em; }
+.feature p { margin-top: 4px; color: var(--muted); font-size: .9375rem; line-height: 1.4; }
+
+/* FAQ */
+.faq { width: 100%; margin-top: 28px; background: var(--surface); border-radius: 20px; box-shadow: 0 0 0 1px var(--hairline); overflow: hidden; }
+.faq details + details { border-top: 1px solid var(--hairline); }
+.faq summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 56px; padding: 12px 16px; font-size: 1.0625rem; font-weight: 500; letter-spacing: -.01em; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary svg { width: 18px; height: 18px; flex-shrink: 0; fill: none; stroke: var(--muted); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s ease; }
+.faq details[open] summary svg { transform: rotate(90deg); }
+.faq details p { padding: 0 16px 16px; color: var(--muted); font-size: .9375rem; line-height: 1.5; }
+
+/* Share button */
 .share {
   margin-top: 20px; min-height: 48px; padding: 0 22px;
   display: inline-flex; align-items: center; gap: 8px;
@@ -198,14 +218,14 @@ footer { margin-top: 24px; color: var(--muted); font-size: .8125rem; text-align:
 
 <main class="page">
   <div class="bar">
-    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Vaihda teemaa">
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle theme">
       <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
       <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
     </button>
   </div>
 
   <header class="hero">
-    <div class="avatar" id="avatar"><img id="avatarImg" alt="LFT-logo" width="112" height="112"></div>
+    <div class="avatar" id="avatar"><img id="avatarImg" alt="LFT logo" width="112" height="112"></div>
     <h1 id="name"></h1>
     <p class="bio" id="bio"></p>
   </header>
@@ -213,19 +233,23 @@ footer { margin-top: 24px; color: var(--muted); font-size: .8125rem; text-align:
   <div class="stores">
     <a class="store" id="storeIos" href="#" target="_blank" rel="noopener">
       <svg viewBox="0 0 384 512" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
-      <span class="store-text"><small>Lataa</small><strong>App Store</strong></span>
+      <span class="store-text"><small>Download on</small><strong>App Store</strong></span>
     </a>
     <a class="store" id="storeAndroid" href="#" target="_blank" rel="noopener">
       <svg viewBox="0 0 512 512" aria-hidden="true"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/></svg>
-      <span class="store-text"><small>Hanki</small><strong>Google Play</strong></span>
+      <span class="store-text"><small>Get it on</small><strong>Google Play</strong></span>
     </a>
   </div>
 
+  <section class="rail" id="features" aria-label="Highlights"></section>
+
   <ul class="list" id="links"></ul>
+
+  <section class="faq" id="faq" aria-label="Frequently asked questions"></section>
 
   <button class="share" id="shareBtn" type="button">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
-    Jaa sivu
+    Share page
   </button>
 
   <footer id="footer"></footer>
@@ -235,15 +259,28 @@ footer { margin-top: 24px; color: var(--muted); font-size: .8125rem; text-align:
 
 <script>
 /* ============================================
-   ASETUKSET
+   SETTINGS
    ============================================ */
 const CONFIG = {
   name: "LFT Gym App",
   monogram: "LFT",
-  bio: "Seuraa meitä somessa ja lue lisää sovelluksesta!",
-  avatar: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=300&auto=format&fit=crop", // vaihda omaan logoon, esim. "logo.png"
+  bio: "Follow us on social media and learn more about the app!",
+  avatar: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=300&auto=format&fit=crop", // replace with your own logo, e.g. "logo.png"
   footer: "© 2026 LFT Gym App",
-  // Lisää kauppalinkit tähän. Tyhjä arvo näyttää painikkeen tilassa "Tulossa".
+  email: "", // optional: adds a "Contact us" row, e.g. "hello@yourdomain.com"
+  // Highlights (swipeable cards). Edit the text to match your app. Icons: dumbbell, chart, timer, bolt
+  features: [
+    { icon: "dumbbell", title: "Log every workout", text: "Record sets, reps and weights in seconds." },
+    { icon: "chart", title: "See your progress", text: "Clear charts that show how you are improving." },
+    { icon: "timer", title: "Rest timers", text: "Stay on pace between sets without thinking about it." },
+    { icon: "bolt", title: "Built for focus", text: "A simple layout that stays out of your way." }
+  ],
+  faq: [
+    { q: "Which devices are supported?", a: "LFT Gym App is available for iPhone and Android phones." },
+    { q: "Where can I read the privacy policy?", a: "Open App info & privacy policy in the list above." },
+    { q: "How can I get in touch?", a: "Send us a message on Instagram or TikTok and we will get back to you." }
+  ],
+  // Add your store links here. An empty value shows the button as "Coming soon".
   stores: {
     ios: "",
     android: ""
@@ -274,7 +311,7 @@ const CONFIG = {
       androidPackage: "com.google.android.youtube"
     },
     {
-      label: "Sovelluksen tiedot ja tietosuojaseloste",
+      label: "App info & privacy policy",
       icon: "info",
       web: "https://sites.google.com/view/applft?usp=sharing"
     }
@@ -282,7 +319,7 @@ const CONFIG = {
 };
 
 /* ============================================
-   LOGIIKKA
+   LOGIC
    ============================================ */
 const ICONS = {
   instagram: { bg: "linear-gradient(45deg,#f9a03f 0%,#e1306c 50%,#833ab4 100%)",
@@ -291,13 +328,25 @@ const ICONS = {
     svg: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.6 5.82A4.28 4.28 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6 0-1.72 1.66-3.01 3.37-2.48V9.66c-3.45-.46-6.47 2.22-6.47 5.64 0 3.33 2.76 5.7 5.69 5.7 3.14 0 5.69-2.55 5.69-5.7V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3s-1.88.09-3.24-1.48z"/></svg>' },
   youtube: { bg: "#ff0033",
     svg: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.6 7.2a2.5 2.5 0 0 0-1.76-1.77C18.3 5 12 5 12 5s-6.3 0-7.84.43A2.5 2.5 0 0 0 2.4 7.2C2 8.76 2 12 2 12s0 3.24.4 4.8a2.5 2.5 0 0 0 1.76 1.77C5.7 19 12 19 12 19s6.3 0 7.84-.43a2.5 2.5 0 0 0 1.76-1.77C22 15.24 22 12 22 12s0-3.24-.4-4.8zM10 15V9l5.2 3-5.2 3z"/></svg>' },
+  mail: { bg: "#0a84ff",
+    svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 8l9 6 9-6"/></svg>' },
   info: { bg: "linear-gradient(160deg,#f06292,#c2185b)",
     svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg>' }
 };
 const CHEVRON = '<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>';
 const $ = (id) => document.getElementById(id);
+const FEATURE_ICONS = {
+  dumbbell: '<path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/>',
+  chart: '<path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/>',
+  timer: '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/>',
+  bolt: '<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>'
+};
 
-/* Sisältö */
+/* Platform */
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent || '') || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const isAndroid = /android/i.test(navigator.userAgent || '');
+
+/* Content */
 $('name').textContent = CONFIG.name;
 $('bio').textContent = CONFIG.bio;
 $('footer').textContent = CONFIG.footer;
@@ -309,25 +358,51 @@ avatarImg.addEventListener('error', () => {
 });
 avatarImg.src = CONFIG.avatar;
 
-/* Kauppapainikkeet */
-[['storeIos', CONFIG.stores.ios, 'Lataa'], ['storeAndroid', CONFIG.stores.android, 'Hanki']].forEach(([id, url]) => {
+/* Store buttons */
+[['storeIos', CONFIG.stores.ios], ['storeAndroid', CONFIG.stores.android]].forEach(([id, url]) => {
   const el = $(id);
   if (url) { el.href = url; return; }
   el.removeAttribute('href');
   el.removeAttribute('target');
   el.setAttribute('aria-disabled', 'true');
-  el.querySelector('small').textContent = 'Tulossa';
+  el.querySelector('small').textContent = 'Coming soon';
 });
 
-/* Linkit */
+/* On phones, put the matching store first */
+if (isIOS || isAndroid) {
+  document.querySelector('.stores').classList.add('detected');
+  $(isIOS ? 'storeIos' : 'storeAndroid').classList.add('primary');
+  $(isIOS ? 'storeAndroid' : 'storeIos').classList.add('secondary');
+}
+
+/* Highlights */
+CONFIG.features.forEach((f) => {
+  const card = document.createElement('article');
+  card.className = 'feature';
+  card.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true">' + (FEATURE_ICONS[f.icon] || FEATURE_ICONS.bolt) + '</svg><h3></h3><p></p>';
+  card.querySelector('h3').textContent = f.title;
+  card.querySelector('p').textContent = f.text;
+  $('features').appendChild(card);
+});
+
+/* FAQ */
+CONFIG.faq.forEach((item) => {
+  const d = document.createElement('details');
+  d.innerHTML = '<summary><span></span>' + CHEVRON + '</summary><p></p>';
+  d.querySelector('span').textContent = item.q;
+  d.querySelector('p').textContent = item.a;
+  $('faq').appendChild(d);
+});
+
+/* Links */
+if (CONFIG.email) CONFIG.links.push({ label: "Contact us", icon: "mail", web: "mailto:" + CONFIG.email });
 CONFIG.links.forEach((link) => {
   const icon = ICONS[link.icon] || ICONS.info;
   const li = document.createElement('li');
   const a = document.createElement('a');
   a.className = 'row';
   a.href = link.web;
-  a.target = '_blank';
-  a.rel = 'noopener';
+  if (/^https?:/.test(link.web)) { a.target = '_blank'; a.rel = 'noopener'; }
   a.innerHTML = '<span class="tile" style="background:' + icon.bg + '">' + icon.svg + '</span><span class="label"></span>' + CHEVRON;
   a.querySelector('.label').textContent = link.label;
   a.addEventListener('click', (e) => { if (openInApp(link)) e.preventDefault(); });
@@ -335,7 +410,7 @@ CONFIG.links.forEach((link) => {
   $('links').appendChild(li);
 });
 
-/* Teema */
+/* Theme */
 const root = document.documentElement;
 const metaTheme = document.querySelector('meta[name="theme-color"]');
 function applyTheme(t) {
@@ -356,7 +431,7 @@ if (window.matchMedia) {
   });
 }
 
-/* Ilmoitus */
+/* Toast */
 let toastTimer;
 function toast(msg) {
   const t = $('toast');
@@ -366,27 +441,23 @@ function toast(msg) {
   toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
 }
 
-/* Jakaminen */
+/* Sharing */
 $('shareBtn').addEventListener('click', async () => {
   const data = { title: CONFIG.name, text: CONFIG.name, url: location.href };
   if (navigator.share) {
-    try { await navigator.share(data); } catch (e) { /* käyttäjä peruutti */ }
+    try { await navigator.share(data); } catch (e) { /* user cancelled */ }
     return;
   }
   try {
     await navigator.clipboard.writeText(location.href);
-    toast('Linkki kopioitu');
+    toast('Link copied');
   } catch (e) {
-    toast('Kopioi osoite selaimen osoiterivistä');
+    toast('Copy the link from the address bar');
   }
 });
 
-/* Sovelluslinkit: avaa natiivisovellus, muuten selain */
+/* App links: open the native app, otherwise the browser */
 function openInApp(link) {
-  const ua = navigator.userAgent || '';
-  const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  const isAndroid = /android/i.test(ua);
-
   if (isAndroid && link.android && link.androidPackage) {
     const scheme = link.android.split('://')[0];
     const path = link.android.replace(/^[a-z0-9]+:\/\//i, '');
