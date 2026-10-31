@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LFT Links</title>
+<title>LFT Gym App</title>
 <meta name="theme-color" content="#0f0f1a">
 <style>
 :root {
@@ -108,7 +108,7 @@ footer { color: var(--text-muted); font-size: 0.8rem; margin-top: 8px; opacity: 
 </head>
 <body>
 <div class="container">
-  <img id="avatar" class="avatar" src="" alt="Profiilikuva">
+  <img id="avatar" class="avatar" src="" alt="LFT Logo">
   <h1 id="name"></h1>
   <p id="bio" class="bio"></p>
   <div id="links" class="links"></div>
@@ -121,9 +121,11 @@ footer { color: var(--text-muted); font-size: 0.8rem; margin-top: 8px; opacity: 
    ============================================ */
 const CONFIG = {
   name: "LFT Gym App",
-  bio: "Seuraa meitä somessa!",
-  avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=LFT",
-  footer: "© 2025 LFT Gym App",
+  bio: "Seuraa meitä somessa ja lue lisää sovelluksesta!",
+  // Tässä on nyt tyylikäs kuntosalikuva. Jos haluat oman logon, 
+  // voit ladata sen GitHubiin ja vaihtaa tähän tiedostonimen (esim. "logo.jpg")
+  avatar: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=300&auto=format&fit=crop",
+  footer: "© 2026 LFT Gym App",
 
   links: [
     {
@@ -149,6 +151,12 @@ const CONFIG = {
       ios: "instagram://user?username=getlft",
       android: "instagram://user?username=getlft",
       androidPackage: "com.instagram.android"
+    },
+    {
+      label: "App Info + Privacy Policy",
+      icon: "📄",
+      // Tämä avaa aina nettisivun, koska kyseessä ei ole sovellus
+      web: "https://sites.google.com/view/applft?usp=sharing"
     }
   ]
 };
