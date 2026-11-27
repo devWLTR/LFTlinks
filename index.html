@@ -1,388 +1,695 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="midnight">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>LFT Gym App</title>
-<meta name="description" content="LFT Gym App: download the app and follow us on social media.">
-<meta name="theme-color" content="#140f12">
+<title>LFT · Lift more. Tap less.</title>
+<meta name="description" content="LFT is zero-friction gym tracking. One exercise, one card. Join the Discord and help shape what LFT becomes.">
+<meta name="theme-color" content="#0e0a0d">
 <meta name="color-scheme" content="dark light">
-<meta property="og:type" content="website">
-<meta property="og:title" content="LFT Gym App">
-<meta property="og:description" content="Download the app and follow us on social media.">
-<meta property="og:image" content="app_icon.png">
-<meta name="twitter:card" content="summary">
 
-<!-- ========================================== -->
-<!-- ALOITUSNÄYTÖN ASETUKSET (PWA-asetukset)    -->
-<!-- ========================================== -->
-<!-- Ikoni kun sivu tallennetaan aloitusnäytölle -->
-<link rel="apple-touch-icon" href="app_icon.png">
-<link rel="icon" type="image/png" href="app_icon.png">
-<!-- Sallii sivun avautua koko ruudun tilassa (ilman selaimen palkkeja) -->
+<!-- Sharing preview (Instagram, Discord, iMessage...) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="LFT">
+<meta property="og:title" content="LFT · Lift more. Tap less.">
+<meta property="og:description" content="Zero-friction gym tracking. Join the Discord and help shape what LFT becomes.">
+<meta property="og:url" content="https://devwltr.github.io/LFTlinks/">
+<meta property="og:image" content="https://devwltr.github.io/LFTlinks/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://devwltr.github.io/LFTlinks/assets/og.jpg">
+
+<!-- Icons + home screen (PWA) -->
+<link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<!-- Yläpalkin tyyli iPhonessa (sulautuu tummaan teemaan) -->
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="LFT">
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/logo.webp" type="image/webp">
+
 <script>
-/* Set the theme before first paint so the page never flashes */
+/* Pick the theme before first paint so the page never flashes */
 (function () {
-  var t = null;
-  try { t = localStorage.getItem('theme'); } catch (e) {}
-  if (t !== 'light' && t !== 'dark') {
-    t = window.matchMedia && matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  var d = document.documentElement, t = null;
+  d.classList.add('js');
+  try { t = localStorage.getItem('lft-theme'); } catch (e) {}
+  if (t !== 'midnight' && t !== 'blush' && t !== 'noir') {
+    t = window.matchMedia && matchMedia('(prefers-color-scheme: light)').matches ? 'blush' : 'midnight';
   }
-  document.documentElement.setAttribute('data-theme', t);
+  d.setAttribute('data-theme', t);
 })();
 </script>
+
 <style>
-:root {
-  --bg: #140f12;
-  --glow: rgba(248, 187, 208, 0.16);
-  --surface: #211a1f;
-  --surface-hover: #2a2229;
-  --hairline: rgba(255, 255, 255, 0.09);
-  --text: #f6f2f4;
-  --muted: #a8a0a6;
-  --accent: #f8bbd0;
-  --on-accent: #2a1320;
-  --cta-bg: #f6f2f4;
-  --cta-text: #140f12;
-  --focus: #f8bbd0;
+/* ==========================================================
+   THEMES: same three as in the app (Midnight, Blush, Noir)
+   ========================================================== */
+:root, [data-theme="midnight"] {
+  --bg: #0e0a0d;
+  --blob-a: rgba(126, 62, 92, .42);
+  --blob-b: rgba(66, 64, 140, .30);
+  --blob-c: rgba(248, 170, 200, .10);
+  --surface: rgba(255, 255, 255, .045);
+  --surface-strong: rgba(255, 255, 255, .07);
+  --hairline: rgba(255, 255, 255, .085);
+  --text: #f6f1f4;
+  --muted: #a69ca3;
+  --faint: #6f666c;
+  --accent: #f7a9c4;
+  --accent-ink: #f7a9c4;
+  --btn: #f7b2c9;
+  --btn-text: #2a1320;
+  --btn-2: rgba(255, 255, 255, .06);
+  --btn-2-text: #f6f1f4;
+  --stage: #121013;
+  --shadow: 0 30px 80px -30px rgba(0, 0, 0, .8);
+  --meta: #0e0a0d;
   color-scheme: dark;
 }
-[data-theme="light"] {
-  --bg: #f6f4f5;
-  --glow: rgba(216, 27, 96, 0.09);
-  --surface: #ffffff;
-  --surface-hover: #f0edef;
-  --hairline: rgba(0, 0, 0, 0.09);
-  --text: #1d1b1c;
-  --muted: #6b6569;
-  --accent: #c2185b;
-  --on-accent: #ffffff;
-  --cta-bg: #1d1b1c;
-  --cta-text: #ffffff;
-  --focus: #c2185b;
+[data-theme="blush"] {
+  --bg: #fbf0f3;
+  --blob-a: rgba(247, 156, 192, .45);
+  --blob-b: rgba(186, 168, 245, .42);
+  --blob-c: rgba(255, 205, 180, .40);
+  --surface: rgba(255, 255, 255, .55);
+  --surface-strong: rgba(255, 255, 255, .78);
+  --hairline: rgba(60, 20, 40, .09);
+  --text: #1e1519;
+  --muted: #6e6168;
+  --faint: #9c8f96;
+  --accent: #f29bbb;
+  --accent-ink: #d1407a;
+  --btn: #f6a8c2;
+  --btn-text: #2a1320;
+  --btn-2: rgba(255, 255, 255, .7);
+  --btn-2-text: #1e1519;
+  --stage: #141114;
+  --shadow: 0 30px 70px -30px rgba(120, 40, 80, .35);
+  --meta: #fbf0f3;
   color-scheme: light;
 }
+[data-theme="noir"] {
+  --bg: #000;
+  --blob-a: rgba(255, 255, 255, .07);
+  --blob-b: rgba(255, 255, 255, .04);
+  --blob-c: rgba(255, 255, 255, .03);
+  --surface: rgba(255, 255, 255, .04);
+  --surface-strong: rgba(255, 255, 255, .08);
+  --hairline: rgba(255, 255, 255, .1);
+  --text: #f5f5f5;
+  --muted: #9a9a9a;
+  --faint: #666;
+  --accent: #ffffff;
+  --accent-ink: #ffffff;
+  --btn: #ffffff;
+  --btn-text: #000;
+  --btn-2: rgba(255, 255, 255, .07);
+  --btn-2-text: #f5f5f5;
+  --stage: #0b0b0b;
+  --shadow: 0 30px 80px -30px rgba(0, 0, 0, .9);
+  --meta: #000;
+  color-scheme: dark;
+}
 
+/* ==========================================================
+   BASE
+   ========================================================== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { -webkit-text-size-adjust: 100%; }
-
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-feature-settings: "cv11", "ss01";
   background: var(--bg);
-  background-image: radial-gradient(60% 40% at 50% 0%, var(--glow), transparent 70%);
-  background-repeat: no-repeat;
   color: var(--text);
   min-height: 100vh;
   min-height: 100dvh;
-  padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(28px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  transition: background-color .3s ease, color .3s ease;
+  transition: background-color .5s ease, color .5s ease;
 }
-
+img, video { display: block; max-width: 100%; }
 a, button { -webkit-tap-highlight-color: transparent; font: inherit; color: inherit; }
-:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
 
-.page {
-  width: 100%;
-  max-width: 440px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  animation: enter .6s cubic-bezier(.2, .7, .2, 1) both;
+/* Ambient glow behind everything, like the video background */
+.ambient { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.ambient i {
+  position: absolute; width: 70vmax; height: 70vmax; border-radius: 50%;
+  transition: background .6s ease;
+  will-change: transform;
 }
-@keyframes enter { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-
-/* Theme toggle */
-.bar { width: 100%; display: flex; justify-content: flex-end; height: 44px; }
-.theme-toggle {
-  width: 44px; height: 44px;
-  display: grid; place-items: center;
-  background: transparent; border: 0; border-radius: 50%;
-  color: var(--muted); cursor: pointer;
-  transition: color .2s ease, background-color .2s ease;
+.ambient i:nth-child(1) { left: -25vmax; top: -30vmax; background: radial-gradient(closest-side, var(--blob-a), transparent); animation: drift1 26s ease-in-out infinite alternate; }
+.ambient i:nth-child(2) { right: -30vmax; top: 10vh; background: radial-gradient(closest-side, var(--blob-b), transparent); animation: drift2 32s ease-in-out infinite alternate; }
+.ambient i:nth-child(3) { left: 10vw; bottom: -45vmax; background: radial-gradient(closest-side, var(--blob-c), transparent); animation: drift1 38s ease-in-out infinite alternate-reverse; }
+@keyframes drift1 { to { transform: translate3d(8vmax, 6vmax, 0) scale(1.08); } }
+@keyframes drift2 { to { transform: translate3d(-10vmax, 8vmax, 0) scale(.94); } }
+.grain {
+  position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: .05; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
-.theme-toggle:hover { color: var(--text); background: var(--surface); }
-.theme-toggle svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.theme-toggle .i-sun { display: none; }
-[data-theme="light"] .theme-toggle .i-sun { display: block; }
-[data-theme="light"] .theme-toggle .i-moon { display: none; }
 
-/* Intro */
-.hero { display: flex; flex-direction: column; align-items: center; text-align: center; padding-top: 8px; width: 100%; }
-
-/* Bannerikuva */
-.avatar {
-  width: 100%;
-  height: 200px;
-  border-radius: 24px;
-  overflow: hidden;
-  background: var(--surface);
-  box-shadow: 0 0 0 1px var(--hairline), 0 12px 40px -8px var(--glow), 0 24px 48px -16px rgba(0, 0, 0, .4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
+.wrap {
+  width: 100%; max-width: 1080px; margin: 0 auto;
+  padding-left: max(20px, env(safe-area-inset-left));
+  padding-right: max(20px, env(safe-area-inset-right));
 }
-.avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.avatar::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 40%;
-  background: linear-gradient(to top, var(--bg), transparent);
+.narrow { max-width: 600px; }
+
+.eyebrow {
+  font-size: .6875rem; font-weight: 600; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--accent-ink);
+}
+.eyebrow.dim { color: var(--muted); }
+.accent { color: var(--accent-ink); }
+
+/* ==========================================================
+   TOP BAR
+   ========================================================== */
+.top {
+  position: sticky; top: 0; z-index: 20;
+  padding-top: max(12px, env(safe-area-inset-top));
+  padding-bottom: 12px;
+  transition: background-color .3s ease, box-shadow .3s ease;
+}
+.top.scrolled {
+  background: color-mix(in srgb, var(--bg) 72%, transparent);
+  -webkit-backdrop-filter: saturate(1.6) blur(18px);
+  backdrop-filter: saturate(1.6) blur(18px);
+  box-shadow: 0 1px 0 var(--hairline);
+}
+.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.mark { display: flex; align-items: center; height: 36px; text-decoration: none; opacity: 0; transform: translateY(-4px); transition: opacity .35s ease, transform .35s ease; }
+.top.scrolled .mark { opacity: 1; transform: none; }
+.mark img { height: 26px; width: auto; }
+
+.themes {
+  display: flex; gap: 2px; padding: 3px; border-radius: 999px;
+  background: var(--surface); box-shadow: inset 0 0 0 1px var(--hairline);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+}
+.themes button {
+  display: flex; align-items: center; gap: 7px;
+  height: 32px; padding: 0 12px 0 9px; border: 0; border-radius: 999px;
+  background: transparent; color: var(--muted);
+  font-size: .75rem; font-weight: 600; letter-spacing: .02em;
+  transition: background-color .25s ease, color .25s ease;
+}
+.themes button:hover { color: var(--text); }
+.themes button[aria-pressed="true"] { background: var(--surface-strong); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,.12), inset 0 0 0 1px var(--hairline); }
+.themes .dot { width: 12px; height: 12px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(127,127,127,.35); }
+.dot.midnight { background: linear-gradient(135deg, #3a2632, #1b1622); }
+.dot.blush { background: linear-gradient(135deg, #ffd1e0, #f29bbb); }
+.dot.noir { background: #000; box-shadow: inset 0 0 0 1px rgba(255,255,255,.4); }
+@media (max-width: 380px) { .themes button { padding: 0 9px; } .themes .name { display: none; } }
+
+/* ==========================================================
+   HERO
+   ========================================================== */
+.hero { text-align: center; padding-top: 28px; padding-bottom: 8px; }
+.logo {
+  position: relative; width: min(78vw, 420px); aspect-ratio: 800 / 318; margin: 0 auto;
+  animation: float 7s ease-in-out infinite;
+  filter: drop-shadow(0 18px 40px rgba(0, 0, 0, .45));
+}
+[data-theme="blush"] .logo { filter: drop-shadow(0 16px 30px rgba(120, 40, 80, .28)); }
+.logo img { width: 100%; height: 100%; }
+/* A soft light sweep across the chrome, masked to the logo shape */
+.logo::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(105deg, transparent 38%, rgba(255,255,255,.55) 50%, transparent 62%);
+  background-size: 250% 100%; background-position: 130% 0;
+  -webkit-mask: url(assets/logo.webp) center / contain no-repeat;
+  mask: url(assets/logo.webp) center / contain no-repeat;
+  mix-blend-mode: overlay;
+  animation: sheen 7s ease-in-out 1.2s infinite;
+}
+@keyframes float { 50% { transform: translateY(-6px); } }
+@keyframes sheen { 0% { background-position: 130% 0; } 35%, 100% { background-position: -30% 0; } }
+
+.hero .eyebrow { margin-top: 26px; }
+h1 {
+  margin: 14px auto 0; max-width: 14ch;
+  font-size: clamp(2.6rem, 9vw, 4.75rem); line-height: 1; font-weight: 700; letter-spacing: -.045em;
+  text-wrap: balance;
+}
+.lede {
+  margin: 18px auto 0; max-width: 34ch;
+  color: var(--muted); font-size: clamp(1.0625rem, 2.6vw, 1.25rem); line-height: 1.45; letter-spacing: -.01em;
+  text-wrap: balance;
+}
+
+.ctas { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 30px; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 52px; padding: 0 22px; border: 0; border-radius: 999px;
+  font-size: 1rem; font-weight: 600; letter-spacing: -.01em; text-decoration: none; white-space: nowrap;
+  transition: transform .18s cubic-bezier(.2,.7,.2,1), box-shadow .25s ease, background-color .25s ease, opacity .2s ease;
+}
+.btn svg { width: 20px; height: 20px; flex-shrink: 0; fill: currentColor; }
+.btn:active { transform: scale(.97); }
+.btn.primary { background: var(--btn); color: var(--btn-text); box-shadow: 0 10px 30px -10px var(--accent); }
+.btn.primary:hover { box-shadow: 0 14px 36px -10px var(--accent); transform: translateY(-1px); }
+.btn.secondary {
+  background: var(--btn-2); color: var(--btn-2-text); box-shadow: inset 0 0 0 1px var(--hairline);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+}
+.btn.secondary:hover { background: var(--surface-strong); }
+.btn .two { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.1; }
+.btn .two small { font-size: .6875rem; font-weight: 500; opacity: .7; letter-spacing: 0; }
+.btn[aria-disabled="true"] { cursor: default; }
+.btn[aria-disabled="true"]:active { transform: none; }
+.btn[aria-disabled="true"]:hover { background: var(--btn-2); }
+.hint { margin-top: 16px; color: var(--faint); font-size: .8125rem; }
+
+/* ==========================================================
+   VIDEO
+   ========================================================== */
+.film { padding-top: 56px; }
+.screen {
+  position: relative; max-width: 960px; margin: 0 auto;
+  aspect-ratio: 16 / 9; border-radius: clamp(16px, 2.6vw, 28px); overflow: hidden;
+  background: #0b090b;
+  box-shadow: 0 0 0 1px var(--hairline), var(--shadow), 0 0 120px -40px var(--accent);
+  isolation: isolate;
+}
+.screen video { width: 100%; height: 100%; object-fit: cover; }
+.screen::after { /* soft inner rim */
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+}
+.vc {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  padding: clamp(10px, 2vw, 18px);
+  background: linear-gradient(to top, rgba(0,0,0,.45), transparent);
+  opacity: 1; transition: opacity .35s ease;
+}
+.screen.idle .vc { opacity: 0; }
+.vc .group { display: flex; gap: 8px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  height: 36px; padding: 0 14px; border: 0; border-radius: 999px;
+  background: rgba(20, 16, 20, .55); color: #fff;
+  font-size: .8125rem; font-weight: 600; letter-spacing: -.005em;
+  -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.14);
+  transition: background-color .2s ease, transform .15s ease;
+}
+.chip:hover { background: rgba(40, 32, 40, .7); }
+.chip:active { transform: scale(.96); }
+.chip.icon { width: 36px; padding: 0; justify-content: center; }
+.chip svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.progress { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; z-index: 3; background: rgba(255,255,255,.12); }
+.progress span { display: block; height: 100%; width: 100%; transform-origin: left; transform: scaleX(0); background: #f7a9c4; }
+.bigplay {
+  position: absolute; inset: 0; margin: auto; z-index: 2;
+  width: 76px; height: 76px; border-radius: 50%; border: 0;
+  display: none; place-items: center; color: #fff;
+  background: rgba(20,16,20,.5); box-shadow: inset 0 0 0 1px rgba(255,255,255,.2);
+  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+}
+.bigplay svg { width: 28px; height: 28px; fill: currentColor; margin-left: 4px; }
+.screen.paused .bigplay { display: grid; }
+.film figcaption { margin-top: 14px; text-align: center; color: var(--faint); font-size: .8125rem; }
+
+/* ==========================================================
+   STATEMENT
+   ========================================================== */
+.statement { padding-top: clamp(88px, 14vw, 150px); padding-bottom: clamp(40px, 7vw, 70px); text-align: center; }
+.statement p {
+  font-size: clamp(2rem, 6.4vw, 3.75rem); line-height: 1.04; font-weight: 700; letter-spacing: -.045em;
+}
+.statement .soft { display: block; color: var(--muted); font-weight: 600; }
+.strike { position: relative; display: inline-block; transition: color .6s ease .6s; }
+.in .strike, html:not(.js) .strike { color: var(--faint); }
+.strike::after {
+  content: ""; position: absolute; left: -2%; right: -2%; top: 54%; height: .075em; border-radius: 1em;
+  background: var(--accent); transform: scaleX(0); transform-origin: left;
+  transition: transform .7s cubic-bezier(.7,0,.2,1) .45s;
+}
+.in .strike::after, html:not(.js) .strike::after { transform: scaleX(1); }
+
+/* ==========================================================
+   FEATURES (scenes from the video)
+   ========================================================== */
+.scenes { display: grid; gap: 18px; padding-bottom: 20px; }
+.scene {
+  display: grid; align-items: center; gap: 8px;
+  border-radius: 30px; overflow: hidden;
+  background: var(--surface); box-shadow: inset 0 0 0 1px var(--hairline);
+  -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
+}
+.scene .copy { padding: 34px 28px 6px; }
+.scene h2 { margin-top: 12px; font-size: clamp(2rem, 5.6vw, 3.25rem); line-height: 1.02; font-weight: 700; letter-spacing: -.045em; }
+.scene p { margin-top: 14px; max-width: 32ch; color: var(--muted); font-size: 1.0625rem; line-height: 1.5; }
+.stage { position: relative; min-height: 340px; display: grid; place-items: end center; overflow: hidden; }
+.stage::before { /* soft glow behind the phone */
+  content: ""; position: absolute; left: 50%; top: 48%; width: 80%; aspect-ratio: 1; transform: translate(-50%, -50%);
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 22%, transparent), transparent);
   pointer-events: none;
 }
-.avatar.fallback { background: var(--accent); color: var(--on-accent); font-size: 2.5rem; font-weight: 800; letter-spacing: -.03em; }
-
-h1 { margin-top: 16px; font-size: 1.75rem; line-height: 1.15; font-weight: 700; letter-spacing: -.025em; }
-.bio { margin-top: 8px; max-width: 30ch; color: var(--muted); font-size: 1.0625rem; line-height: 1.45; text-wrap: balance; }
-
-/* Store buttons */
-.stores { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 28px; }
-.store {
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  min-height: 56px; padding: 8px 12px;
-  background: var(--cta-bg); color: var(--cta-text);
-  border-radius: 16px; text-decoration: none;
-  transition: transform .15s ease, opacity .15s ease;
+.stage img {
+  position: relative; width: min(62%, 290px); height: auto; margin: 30px 0 -40px;
+  transform: translateY(36px); transition: transform 1.2s cubic-bezier(.2,.7,.2,1);
 }
-.store:hover { opacity: .92; }
-.store:active { transform: scale(.97); }
-.store svg { width: 24px; height: 24px; fill: currentColor; flex-shrink: 0; }
-.store-text { display: flex; flex-direction: column; line-height: 1.15; text-align: left; }
-.store-text small { font-size: .7rem; opacity: .7; }
-.store-text strong { font-size: 1.05rem; font-weight: 600; letter-spacing: -.01em; white-space: nowrap; }
-.stores .store.primary { order: -1; }
-.stores.detected .store { grid-column: 1 / -1; }
-.stores.detected .store.secondary { background: var(--surface); color: var(--text); box-shadow: inset 0 0 0 1px var(--hairline); min-height: 48px; }
-.store[aria-disabled="true"] { background: var(--surface); color: var(--muted); box-shadow: inset 0 0 0 1px var(--hairline); cursor: default; }
-.store[aria-disabled="true"]:active { transform: none; }
+.in .stage img, html:not(.js) .stage img { transform: none; }
 
-/* Link list */
+.scene.themes-scene { background: linear-gradient(135deg, #fdc0d8 0%, #fde6ec 45%, #fbeae6 70%, #e9def9 100%); color: #1e1519; box-shadow: inset 0 0 0 1px rgba(60,20,40,.08); }
+.themes-scene .eyebrow { color: #d1407a; }
+.themes-scene p { color: #6e6168; }
+.themes-scene .stage { min-height: 0; place-items: center; padding: 8px 8px 24px; }
+.themes-scene .stage::before { display: none; }
+.themes-scene .stage img { width: min(100%, 560px); margin: 0 auto; }
+.swatches { display: flex; gap: 18px; margin-top: 22px; font-size: .6875rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; }
+.swatches span { display: flex; align-items: center; gap: 7px; color: #3a2a32; }
+.swatches span.on { color: #d1407a; }
+.swatches i { width: 10px; height: 10px; border-radius: 50%; }
+
+.also { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; padding-top: 6px; }
+.also span {
+  display: inline-flex; align-items: center; gap: 8px; height: 38px; padding: 0 16px; border-radius: 999px;
+  background: var(--surface); box-shadow: inset 0 0 0 1px var(--hairline); color: var(--muted);
+  font-size: .875rem; font-weight: 500;
+}
+.also svg { width: 16px; height: 16px; fill: none; stroke: var(--accent-ink); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+@media (min-width: 820px) {
+  .scene { grid-template-columns: 1.05fr 1fr; min-height: 440px; gap: 0; }
+  .scene .copy { padding: 56px 20px 56px 56px; }
+  .scene.flip { grid-template-columns: 1fr 1.05fr; }
+  .scene.flip .copy { order: 2; padding: 56px 56px 56px 20px; }
+  .stage { min-height: 460px; }
+  .stage img { width: min(56%, 290px); }
+  .themes-scene { grid-template-columns: .9fr 1.1fr; }
+  .themes-scene .stage { padding: 32px 32px 32px 0; }
+  .themes-scene .stage img { width: 100%; }
+}
+
+/* ==========================================================
+   LINKS + FAQ
+   ========================================================== */
+.section { padding-top: clamp(80px, 12vw, 120px); }
+.section-head { text-align: center; margin-bottom: 22px; }
+.section-head h2 { margin-top: 10px; font-size: clamp(1.75rem, 5vw, 2.5rem); line-height: 1.05; font-weight: 700; letter-spacing: -.04em; }
+
 .list {
-  width: 100%; list-style: none; margin-top: 28px;
-  background: var(--surface); border-radius: 20px;
-  box-shadow: 0 0 0 1px var(--hairline);
-  overflow: hidden;
+  list-style: none; border-radius: 22px; overflow: hidden;
+  background: var(--surface); box-shadow: inset 0 0 0 1px var(--hairline);
+  -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
 }
-.list li { margin-left: 68px; }
-.list li + li { border-top: 1px solid var(--hairline); }
-
+.list li { position: relative; }
+.list li + li::before { content: ""; position: absolute; top: 0; left: 70px; right: 0; height: 1px; background: var(--hairline); }
 .row {
-  display: flex; align-items: center; gap: 14px;
-  min-height: 64px; padding: 10px 16px 10px 0;
-  margin-left: -68px; padding-left: 16px;
-  text-decoration: none; font-size: 1.0625rem; font-weight: 500; letter-spacing: -.01em;
-  transition: background-color .15s ease;
+  display: flex; align-items: center; gap: 16px;
+  min-height: 68px; padding: 12px 18px;
+  text-decoration: none; font-size: 1.0625rem; font-weight: 500; letter-spacing: -.015em;
+  transition: background-color .18s ease;
 }
-.row:hover { background: var(--surface-hover); }
-.row:active { background: var(--surface-hover); filter: brightness(.96); }
+.row:hover { background: var(--surface-strong); }
 .row .tile {
-  width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
+  width: 38px; height: 38px; border-radius: 11px; flex-shrink: 0;
   display: grid; place-items: center; color: #fff;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .12);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.14), 0 4px 12px -4px rgba(0,0,0,.35);
 }
 .row .tile svg { width: 21px; height: 21px; }
-.row .label { flex: 1; }
-.row .chev { width: 18px; height: 18px; fill: none; stroke: var(--muted); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; opacity: .7; transition: transform .2s ease; }
-.row:hover .chev { transform: translateX(2px); }
+.row .label { flex: 1; display: flex; flex-direction: column; gap: 1px; }
+.row .label small { color: var(--muted); font-size: .8125rem; font-weight: 400; letter-spacing: 0; }
+.chev { width: 18px; height: 18px; fill: none; stroke: var(--faint); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s ease; flex-shrink: 0; }
+.row:hover .chev { transform: translateX(3px); }
 
-/* Highlights (Ominaisuudet) */
-.rail { 
-  width: 100%; 
-  display: flex; 
-  gap: 12px; 
-  margin-top: 28px; 
-  overflow-x: auto; 
-  scroll-snap-type: x mandatory; 
-  scrollbar-width: none; 
-  -webkit-overflow-scrolling: touch;
-  padding-bottom: 4px;
-}
-.rail::-webkit-scrollbar { display: none; }
-.feature { 
-  flex: 0 0 82%;
-  scroll-snap-align: start; 
-  background: var(--surface); 
-  box-shadow: 0 0 0 1px var(--hairline); 
-  border-radius: 20px; 
-  padding: 18px; 
-}
-.feature svg { width: 26px; height: 26px; fill: none; stroke: var(--accent); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.feature h3 { margin-top: 14px; font-size: 1.0625rem; font-weight: 600; letter-spacing: -.01em; }
-.feature p { margin-top: 4px; color: var(--muted); font-size: .9375rem; line-height: 1.4; }
-
-/* Tietokoneella: Muutetaan 2x2 ruudukoksi, ei vieritystä */
-@media (min-width: 500px) {
-  .rail {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    overflow-x: visible;
-    scroll-snap-type: none;
-    padding-bottom: 0;
-  }
-  .feature {
-    flex: none;
-  }
-}
-
-/* FAQ */
-.faq { width: 100%; margin-top: 28px; background: var(--surface); border-radius: 20px; box-shadow: 0 0 0 1px var(--hairline); overflow: hidden; }
+.faq { border-radius: 22px; overflow: hidden; background: var(--surface); box-shadow: inset 0 0 0 1px var(--hairline); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); }
 .faq details + details { border-top: 1px solid var(--hairline); }
-.faq summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 56px; padding: 12px 16px; font-size: 1.0625rem; font-weight: 500; letter-spacing: -.01em; }
+.faq summary {
+  list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  min-height: 60px; padding: 14px 20px; font-size: 1.0625rem; font-weight: 500; letter-spacing: -.015em;
+}
 .faq summary::-webkit-details-marker { display: none; }
-.faq summary svg { width: 18px; height: 18px; flex-shrink: 0; fill: none; stroke: var(--muted); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s ease; }
-.faq details[open] summary svg { transform: rotate(90deg); }
-.faq details p { padding: 0 16px 16px; color: var(--muted); font-size: .9375rem; line-height: 1.5; }
+.faq summary .chev { transition: transform .25s ease; }
+.faq details[open] summary .chev { transform: rotate(90deg); }
+.faq details p { padding: 0 20px 18px; color: var(--muted); font-size: .96875rem; line-height: 1.55; }
 
-/* Share button */
+/* ==========================================================
+   END CARD (like the last frame of the video)
+   ========================================================== */
+.end { padding-top: clamp(90px, 14vw, 140px); text-align: center; }
+.end .logo { width: min(58vw, 280px); animation: none; filter: none; }
+.end .logo::after { display: none; }
+.end h2 { margin-top: 26px; font-size: clamp(2rem, 6vw, 3rem); line-height: 1; font-weight: 700; letter-spacing: -.045em; }
+.end .sub { margin-top: 10px; color: var(--muted); font-size: 1rem; }
+.end .ctas { margin-top: 24px; }
+
 .share {
-  margin-top: 20px; min-height: 48px; padding: 0 22px;
+  margin-top: 28px; min-height: 44px; padding: 0 18px;
   display: inline-flex; align-items: center; gap: 8px;
   background: transparent; border: 0; border-radius: 999px;
-  color: var(--accent); font-size: 1rem; font-weight: 600; letter-spacing: -.01em;
-  cursor: pointer; transition: background-color .2s ease, transform .15s ease;
+  color: var(--accent-ink); font-size: .9375rem; font-weight: 600; letter-spacing: -.01em;
+  transition: background-color .2s ease, transform .15s ease;
 }
 .share:hover { background: var(--surface); }
 .share:active { transform: scale(.97); }
-.share svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.share svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
-footer { margin-top: 24px; color: var(--muted); font-size: .8125rem; text-align: center; }
+footer { padding-top: 36px; padding-bottom: max(32px, env(safe-area-inset-bottom)); text-align: center; color: var(--faint); font-size: .8125rem; line-height: 1.6; }
 
 .toast {
-  position: fixed; left: 50%; bottom: max(28px, env(safe-area-inset-bottom));
+  position: fixed; left: 50%; bottom: max(28px, env(safe-area-inset-bottom)); z-index: 50;
   transform: translate(-50%, 12px);
-  background: var(--cta-bg); color: var(--cta-text);
+  background: var(--text); color: var(--bg);
   padding: 12px 20px; border-radius: 999px;
   font-size: .9375rem; font-weight: 600;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, .3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .3);
   opacity: 0; pointer-events: none;
   transition: opacity .25s ease, transform .25s ease;
 }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
+/* ==========================================================
+   REVEAL ON SCROLL
+   ========================================================== */
+.js .reveal { opacity: 0; transform: translateY(22px); transition: opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1); }
+.js .reveal.in { opacity: 1; transform: none; }
+.js .hero > * { animation: rise .9s cubic-bezier(.2,.7,.2,1) both; }
+.js .hero > :nth-child(2) { animation-delay: .08s; }
+.js .hero > :nth-child(3) { animation-delay: .14s; }
+.js .hero > :nth-child(4) { animation-delay: .2s; }
+.js .hero > :nth-child(5) { animation-delay: .26s; }
+.js .hero > :nth-child(6) { animation-delay: .32s; }
+@keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+
 @media (prefers-reduced-motion: reduce) {
-  .page { animation: none; }
-  *, *::before, *::after { transition-duration: .01ms !important; }
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
+  .js .reveal { opacity: 1; transform: none; }
+  .stage img { transform: none; }
 }
 </style>
 </head>
 <body>
 
-<main class="page">
-  <div class="bar">
-    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle theme">
-      <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
-      <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+<div class="ambient" aria-hidden="true"><i></i><i></i><i></i></div>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="top" id="top">
+  <div class="wrap">
+    <a class="mark" href="#" aria-label="LFT, back to top"><img src="assets/logo.webp" alt="" width="66" height="26"></a>
+    <div class="themes" role="group" aria-label="Theme">
+      <button type="button" data-set-theme="midnight" aria-pressed="false"><i class="dot midnight"></i><span class="name">Midnight</span></button>
+      <button type="button" data-set-theme="blush" aria-pressed="false"><i class="dot blush"></i><span class="name">Blush</span></button>
+      <button type="button" data-set-theme="noir" aria-pressed="false"><i class="dot noir"></i><span class="name">Noir</span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero wrap">
+    <div class="logo">
+      <picture>
+        <source srcset="assets/logo.webp" type="image/webp">
+        <img src="assets/logo.png" alt="LFT" width="800" height="318" fetchpriority="high">
+      </picture>
+    </div>
+    <p class="eyebrow">Introducing LFT</p>
+    <h1>Lift more. <span class="accent">Tap less.</span></h1>
+    <p class="lede" id="lede"></p>
+    <div class="ctas" id="heroCtas"></div>
+    <p class="hint" id="heroHint"></p>
+  </section>
+
+  <!-- VIDEO -->
+  <section class="film wrap reveal" aria-label="LFT trailer">
+    <div class="screen paused" id="screen">
+      <video id="trailer" muted loop playsinline preload="none" poster="assets/trailer-poster.webp" aria-label="LFT trailer video"></video>
+      <button class="bigplay" id="bigPlay" type="button" aria-label="Play video">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>
+      </button>
+      <div class="vc">
+        <div class="group">
+          <button class="chip icon" id="playBtn" type="button" aria-label="Pause">
+            <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg>
+            <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true" style="display:none"><path d="M7 5l12 7-12 7z" fill="currentColor"/></svg>
+          </button>
+          <button class="chip" id="soundBtn" type="button" aria-pressed="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4z"/><path class="wave" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13" style="display:none"/><path class="mute" d="M16 9l6 6M22 9l-6 6"/></svg>
+            <span>Sound off</span>
+          </button>
+        </div>
+        <button class="chip icon" id="fsBtn" type="button" aria-label="Full screen">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+        </button>
+      </div>
+      <div class="progress" aria-hidden="true"><span id="bar"></span></div>
+    </div>
+  </section>
+
+  <!-- STATEMENT -->
+  <section class="statement wrap reveal">
+    <p><span class="soft">Gym apps have</span> too many <span class="strike">buttons</span>.</p>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="wrap" aria-label="Features">
+    <div class="scenes">
+      <article class="scene reveal">
+        <div class="copy">
+          <p class="eyebrow">01 — Focus mode</p>
+          <h2>One exercise.<br><span class="accent">One card.</span></h2>
+          <p>Swipe up for the next lift. Weight, reps and last time’s numbers stay right in front of you.</p>
+        </div>
+        <div class="stage dark"><img src="assets/focus.webp" alt="LFT focus mode: a deadlift card showing 100 kg for 5 reps" width="559" height="1032" loading="lazy"></div>
+      </article>
+
+      <article class="scene flip reveal">
+        <div class="copy">
+          <p class="eyebrow">02 — Plate calculator</p>
+          <h2>Tap.<br><span class="accent">Loaded.</span></h2>
+          <p>Plates go on both sides. The math is already done.</p>
+        </div>
+        <div class="stage dark"><img src="assets/plates.webp" alt="LFT plate calculator showing 85 kg loaded on a barbell" width="559" height="1032" loading="lazy"></div>
+      </article>
+
+      <article class="scene themes-scene reveal">
+        <div class="copy">
+          <p class="eyebrow">03 — Themes</p>
+          <h2>Three themes.</h2>
+          <p>Baby pink included. Try them on this page, top right.</p>
+          <div class="swatches" aria-hidden="true">
+            <span><i style="background:#1d1820"></i>Midnight</span>
+            <span class="on"><i style="background:#f29bbb"></i>Blush</span>
+            <span><i style="background:#000"></i>Noir</span>
+          </div>
+        </div>
+        <div class="stage"><img src="assets/themes.webp" alt="The same workout screen in the Midnight, Blush and Noir themes" width="943" height="692" loading="lazy"></div>
+      </article>
+
+      <div class="also reveal" id="also"></div>
+    </div>
+  </section>
+
+  <!-- LINKS -->
+  <section class="section wrap narrow" aria-labelledby="links-title">
+    <div class="section-head reveal">
+      <p class="eyebrow dim">Follow along</p>
+      <h2 id="links-title">Find LFT everywhere.</h2>
+    </div>
+    <ul class="list reveal" id="links"></ul>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section wrap narrow" aria-labelledby="faq-title">
+    <div class="section-head reveal">
+      <p class="eyebrow dim">Questions</p>
+      <h2 id="faq-title">Good to know.</h2>
+    </div>
+    <div class="faq reveal" id="faq"></div>
+  </section>
+
+  <!-- END CARD -->
+  <section class="end wrap reveal">
+    <div class="logo"><img src="assets/logo.webp" alt="" width="800" height="318" loading="lazy"></div>
+    <h2>Lift more. Tap less.</h2>
+    <p class="sub">LFT — zero-friction gym tracking</p>
+    <div class="ctas" id="endCtas"></div>
+    <button class="share" id="shareBtn" type="button">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+      Share this page
     </button>
-  </div>
-
-  <header class="hero">
-    <div class="avatar" id="avatar"><img id="avatarImg" alt="LFT logo" width="100%" height="100%"></div>
-    <h1 id="name"></h1>
-    <p class="bio" id="bio"></p>
-  </header>
-
-  <div class="stores">
-    <a class="store" id="storeIos" href="#" target="_blank" rel="noopener">
-      <svg viewBox="0 0 384 512" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
-      <span class="store-text"><small>Download on</small><strong>App Store</strong></span>
-    </a>
-    <a class="store" id="storeAndroid" href="#" target="_blank" rel="noopener">
-      <svg viewBox="0 0 512 512" aria-hidden="true"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/></svg>
-      <span class="store-text"><small>Get it on</small><strong>Google Play</strong></span>
-    </a>
-  </div>
-
-  <section class="rail" id="features" aria-label="Highlights"></section>
-
-  <ul class="list" id="links"></ul>
-
-  <section class="faq" id="faq" aria-label="Frequently asked questions"></section>
-
-  <button class="share" id="shareBtn" type="button">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
-    Share page
-  </button>
-
-  <footer id="footer"></footer>
+  </section>
 </main>
 
+<footer class="wrap" id="footer"></footer>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
 /* ============================================
-   SETTINGS
+   SETTINGS: edit these
    ============================================ */
 const CONFIG = {
-  name: "LFT Gym App",
-  monogram: "LFT",
-  bio: "Follow us on social media and learn more about the app!",
-  avatar: "app_icon.png",
+  name: "LFT",
+  lede: "Zero-friction gym tracking. One exercise, one card, one tap to log a set.",
+  hint: "Android first · Help shape what LFT becomes",
   footer: "© 2026 LFT Gym App",
   email: "",
-  features: [
-    { icon: "dumbbell", title: "Log every workout", text: "Record sets, reps and weights in seconds." },
-    { icon: "chart", title: "See your progress", text: "Clear charts that show how you are improving." },
-    { icon: "timer", title: "Rest timers", text: "Stay on pace between sets without thinking about it." },
-    { icon: "bolt", title: "Built for focus", text: "A simple layout that stays out of your way." }
+
+  // Main call to action (the pink button)
+  discord: "https://discord.gg/fj789yDzR7",
+
+  // Store links. Leave empty "" and the button shows "Coming soon".
+  // If ios stays empty, no App Store button is shown at all.
+  stores: {
+    android: "",
+    ios: ""
+  },
+
+  // Small extras under the feature cards
+  also: [
+    { icon: "timer", text: "Rest timers" },
+    { icon: "chart", text: "Progress charts" },
+    { icon: "moon",  text: "Three themes" }
   ],
+
   faq: [
-    { q: "Which devices are supported?", a: "LFT Gym App is available for iPhone and Android phones." },
-    { q: "Where can I read the privacy policy?", a: "Open App info & privacy policy in the list above." },
+    { q: "Which devices are supported?", a: "LFT is Android-only for now. Join the Discord to be the first to hear about new platforms." },
     { q: "How can I join the beta?", a: "Join our Discord community and say hi in #introductions. Testers get early builds before everyone else." },
+    { q: "Where can I read the privacy policy?", a: "Open “App info & privacy policy” in the list above." },
     { q: "How can I get in touch?", a: "Join our Discord, or send us a message on Instagram or TikTok and we will get back to you." }
   ],
-  stores: {
-    ios: "",
-    android: ""
-  },
+
   links: [
-    {
-      label: "Discord community & beta",
-      icon: "discord",
-      web: "https://discord.gg/fj789yDzR7"
-    },
-    {
-      label: "Instagram",
-      icon: "instagram",
-      web: "https://www.instagram.com/getlft/"
-    },
-    {
-      label: "TikTok",
-      icon: "tiktok",
-      web: "https://www.tiktok.com/@lftgymapp",
-      ios: "snssdk1128://user/profile/lftgymapp",
-      android: "snssdk1128://user/profile/lftgymapp",
-      androidPackage: "com.zhiliaoapp.musically"
-    },
-    {
-      label: "YouTube",
-      icon: "youtube",
-      web: "https://www.youtube.com/@Lftgymapp",
-      ios: "youtube://www.youtube.com/@Lftgymapp",
-      android: "youtube://www.youtube.com/@Lftgymapp",
-      androidPackage: "com.google.android.youtube"
-    },
-    {
-      label: "App info & privacy policy",
-      icon: "info",
-      web: "https://sites.google.com/view/applft?usp=sharing"
-    }
-  ]
+    { label: "Discord community & beta", sub: "Help shape what LFT becomes", icon: "discord", web: "https://discord.gg/fj789yDzR7" },
+    { label: "Instagram", sub: "@getlft", icon: "instagram", web: "https://www.instagram.com/getlft/" },
+    { label: "TikTok", sub: "@lftgymapp", icon: "tiktok", web: "https://www.tiktok.com/@lftgymapp",
+      ios: "snssdk1128://user/profile/lftgymapp", android: "snssdk1128://user/profile/lftgymapp", androidPackage: "com.zhiliaoapp.musically" },
+    { label: "YouTube", sub: "@Lftgymapp", icon: "youtube", web: "https://www.youtube.com/@Lftgymapp",
+      ios: "youtube://www.youtube.com/@Lftgymapp", android: "youtube://www.youtube.com/@Lftgymapp", androidPackage: "com.google.android.youtube" },
+    { label: "App info & privacy policy", icon: "info", web: "https://sites.google.com/view/applft?usp=sharing" }
+  ],
+
+  video: {
+    hd: "assets/lft-trailer-1080.mp4",
+    sd: "assets/lft-trailer-720.mp4"
+  }
 };
 
 /* ============================================
    LOGIC
    ============================================ */
+const $ = (id) => document.getElementById(id);
+const root = document.documentElement;
+const reduceMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent || '') || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const isAndroid = /android/i.test(navigator.userAgent || '');
+
 const ICONS = {
   instagram: { bg: "linear-gradient(45deg,#f9a03f 0%,#e1306c 50%,#833ab4 100%)",
     svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>' },
@@ -394,56 +701,80 @@ const ICONS = {
     svg: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.32 4.37A19.8 19.8 0 0 0 15.39 2.8a13.9 13.9 0 0 0-.63 1.3 18.4 18.4 0 0 0-5.52 0 13.6 13.6 0 0 0-.64-1.3 19.7 19.7 0 0 0-4.93 1.54C.54 9.04-.31 13.58.11 18.06a19.9 19.9 0 0 0 6.04 3.05c.49-.66.92-1.36 1.29-2.1a12.9 12.9 0 0 1-2.03-.97c.17-.13.34-.26.5-.39a14.2 14.2 0 0 0 12.18 0l.5.39c-.65.38-1.33.71-2.04.97.37.74.8 1.44 1.29 2.1a19.8 19.8 0 0 0 6.05-3.05c.5-5.19-.84-9.69-3.57-13.69zM8.02 15.33c-1.18 0-2.16-1.09-2.16-2.42s.96-2.42 2.16-2.42c1.21 0 2.18 1.1 2.16 2.42 0 1.33-.96 2.42-2.16 2.42zm7.96 0c-1.18 0-2.16-1.09-2.16-2.42s.96-2.42 2.16-2.42c1.21 0 2.18 1.1 2.16 2.42 0 1.33-.95 2.42-2.16 2.42z"/></svg>' },
   mail: { bg: "#0a84ff",
     svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 8l9 6 9-6"/></svg>' },
-  info: { bg: "linear-gradient(160deg,#f06292,#c2185b)",
+  info: { bg: "linear-gradient(160deg,#f6a8c2,#c2185b)",
     svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg>' }
 };
-const CHEVRON = '<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>';
-const $ = (id) => document.getElementById(id);
-const FEATURE_ICONS = {
-  dumbbell: '<path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/>',
-  chart: '<path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/>',
+const SMALL_ICONS = {
   timer: '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/>',
-  bolt: '<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>'
+  chart: '<path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/>',
+  moon:  '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>'
 };
+const CHEVRON = '<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>';
+const PLAY_SVG = '<svg viewBox="0 0 512 512" aria-hidden="true"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/></svg>';
+const APPLE_SVG = '<svg viewBox="0 0 384 512" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>';
 
-const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent || '') || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-const isAndroid = /android/i.test(navigator.userAgent || '');
-
-$('name').textContent = CONFIG.name;
-$('bio').textContent = CONFIG.bio;
+/* ---------- Text ---------- */
+$('lede').textContent = CONFIG.lede;
+$('heroHint').textContent = CONFIG.hint;
 $('footer').textContent = CONFIG.footer;
 
-const avatar = $('avatar'), avatarImg = $('avatarImg');
-avatarImg.addEventListener('error', () => {
-  avatar.classList.add('fallback');
-  avatar.textContent = CONFIG.monogram || CONFIG.name.slice(0, 3).toUpperCase();
-});
-avatarImg.src = CONFIG.avatar;
+/* ---------- Buttons (hero + end card) ---------- */
+function makeButtons(target) {
+  const frag = document.createDocumentFragment();
 
-[['storeIos', CONFIG.stores.ios], ['storeAndroid', CONFIG.stores.android]].forEach(([id, url]) => {
-  const el = $(id);
-  if (url) { el.href = url; return; }
-  el.removeAttribute('href');
-  el.removeAttribute('target');
-  el.setAttribute('aria-disabled', 'true');
-  el.querySelector('small').textContent = 'Coming soon';
-});
+  const discord = document.createElement('a');
+  discord.className = 'btn primary';
+  discord.href = CONFIG.discord; discord.target = '_blank'; discord.rel = 'noopener';
+  discord.innerHTML = ICONS.discord.svg + '<span>Join our Discord</span>';
+  frag.appendChild(discord);
 
-if (isIOS || isAndroid) {
-  document.querySelector('.stores').classList.add('detected');
-  $(isIOS ? 'storeIos' : 'storeAndroid').classList.add('primary');
-  $(isIOS ? 'storeAndroid' : 'storeIos').classList.add('secondary');
+  const stores = [['android', 'Google Play', PLAY_SVG, 'Get it on']];
+  if (CONFIG.stores.ios) stores.push(['ios', 'App Store', APPLE_SVG, 'Download on']);
+  stores.forEach(([key, title, svg, pre]) => {
+    const url = CONFIG.stores[key];
+    const a = document.createElement('a');
+    a.className = 'btn secondary';
+    a.innerHTML = svg + '<span class="two"><small></small><span></span></span>';
+    a.querySelector('small').textContent = url ? pre : 'Coming soon';
+    a.querySelector('.two > span').textContent = title;
+    if (url) { a.href = url; a.target = '_blank'; a.rel = 'noopener'; }
+    else { a.setAttribute('aria-disabled', 'true'); a.setAttribute('role', 'link'); }
+    // On the matching phone, put the store button first
+    if ((key === 'android' && isAndroid && url) || (key === 'ios' && isIOS && url)) frag.insertBefore(a, frag.firstChild);
+    else frag.appendChild(a);
+  });
+  target.appendChild(frag);
 }
+makeButtons($('heroCtas'));
+makeButtons($('endCtas'));
 
-CONFIG.features.forEach((f) => {
-  const card = document.createElement('article');
-  card.className = 'feature';
-  card.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true">' + (FEATURE_ICONS[f.icon] || FEATURE_ICONS.bolt) + '</svg><h3></h3><p></p>';
-  card.querySelector('h3').textContent = f.title;
-  card.querySelector('p').textContent = f.text;
-  $('features').appendChild(card);
+/* ---------- Extras ---------- */
+CONFIG.also.forEach((x) => {
+  const s = document.createElement('span');
+  s.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true">' + (SMALL_ICONS[x.icon] || SMALL_ICONS.timer) + '</svg><b></b>';
+  s.querySelector('b').textContent = x.text;
+  s.querySelector('b').style.fontWeight = '500';
+  $('also').appendChild(s);
 });
 
+/* ---------- Links ---------- */
+if (CONFIG.email) CONFIG.links.push({ label: "Contact us", sub: CONFIG.email, icon: "mail", web: "mailto:" + CONFIG.email });
+CONFIG.links.forEach((link) => {
+  const icon = ICONS[link.icon] || ICONS.info;
+  const li = document.createElement('li');
+  const a = document.createElement('a');
+  a.className = 'row';
+  a.href = link.web;
+  if (/^https?:/.test(link.web)) { a.target = '_blank'; a.rel = 'noopener'; }
+  a.innerHTML = '<span class="tile" style="background:' + icon.bg + '">' + icon.svg + '</span><span class="label"><span></span></span>' + CHEVRON;
+  a.querySelector('.label > span').textContent = link.label;
+  if (link.sub) { const s = document.createElement('small'); s.textContent = link.sub; a.querySelector('.label').appendChild(s); }
+  a.addEventListener('click', (e) => { if (openInApp(link)) e.preventDefault(); });
+  li.appendChild(a);
+  $('links').appendChild(li);
+});
+
+/* ---------- FAQ ---------- */
 CONFIG.faq.forEach((item) => {
   const d = document.createElement('details');
   d.innerHTML = '<summary><span></span>' + CHEVRON + '</summary><p></p>';
@@ -452,41 +783,112 @@ CONFIG.faq.forEach((item) => {
   $('faq').appendChild(d);
 });
 
-if (CONFIG.email) CONFIG.links.push({ label: "Contact us", icon: "mail", web: "mailto:" + CONFIG.email });
-CONFIG.links.forEach((link) => {
-  const icon = ICONS[link.icon] || ICONS.info;
-  const li = document.createElement('li');
-  const a = document.createElement('a');
-  a.className = 'row';
-  a.href = link.web;
-  if (/^https?:/.test(link.web)) { a.target = '_blank'; a.rel = 'noopener'; }
-  a.innerHTML = '<span class="tile" style="background:' + icon.bg + '">' + icon.svg + '</span><span class="label"></span>' + CHEVRON;
-  a.querySelector('.label').textContent = link.label;
-  a.addEventListener('click', (e) => { if (openInApp(link)) e.preventDefault(); });
-  li.appendChild(a);
-  $('links').appendChild(li);
-});
-
-const root = document.documentElement;
+/* ---------- Theme switcher ---------- */
 const metaTheme = document.querySelector('meta[name="theme-color"]');
-function applyTheme(t) {
+const themeButtons = document.querySelectorAll('[data-set-theme]');
+function applyTheme(t, save) {
   root.setAttribute('data-theme', t);
-  if (metaTheme) metaTheme.setAttribute('content', t === 'light' ? '#f6f4f5' : '#140f12');
+  themeButtons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.setTheme === t)));
+  if (metaTheme) metaTheme.setAttribute('content', getComputedStyle(root).getPropertyValue('--meta').trim() || '#0e0a0d');
+  if (save) { try { localStorage.setItem('lft-theme', t); } catch (e) {} }
 }
-applyTheme(root.getAttribute('data-theme'));
-$('themeToggle').addEventListener('click', () => {
-  const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-  applyTheme(next);
-  try { localStorage.setItem('theme', next); } catch (e) {}
-});
-if (window.matchMedia) {
-  matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
-    let saved = null;
-    try { saved = localStorage.getItem('theme'); } catch (err) {}
-    if (!saved) applyTheme(e.matches ? 'light' : 'dark');
-  });
+applyTheme(root.getAttribute('data-theme'), false);
+themeButtons.forEach((b) => b.addEventListener('click', () => applyTheme(b.dataset.setTheme, true)));
+
+/* ---------- Sticky bar ---------- */
+const topBar = $('top');
+const onScroll = () => topBar.classList.toggle('scrolled', window.scrollY > 120);
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+
+/* ---------- Reveal on scroll ---------- */
+if ('IntersectionObserver' in window && !reduceMotion) {
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+} else {
+  document.querySelectorAll('.reveal').forEach((el) => el.classList.add('in'));
 }
 
+/* ---------- Video ---------- */
+(function () {
+  const v = $('trailer'), screen = $('screen'), bar = $('bar');
+  const playBtn = $('playBtn'), soundBtn = $('soundBtn'), fsBtn = $('fsBtn'), bigPlay = $('bigPlay');
+  const saveData = navigator.connection && navigator.connection.saveData;
+  const small = window.matchMedia('(max-width: 760px)').matches;
+  let userPaused = reduceMotion || saveData;   // respect reduced motion / data saver: wait for a tap
+  let loaded = false, visible = false, idleTimer, raf;
+
+  function load() {
+    if (loaded) return;
+    loaded = true;
+    v.src = (small || saveData) ? CONFIG.video.sd : CONFIG.video.hd;
+    v.preload = 'auto';
+  }
+  function play() { load(); const p = v.play(); if (p && p.catch) p.catch(() => setState()); }
+  function setState() {
+    const paused = v.paused;
+    screen.classList.toggle('paused', paused);
+    playBtn.setAttribute('aria-label', paused ? 'Play' : 'Pause');
+    playBtn.querySelector('.i-pause').style.display = paused ? 'none' : '';
+    playBtn.querySelector('.i-play').style.display = paused ? '' : 'none';
+    const on = !v.muted;
+    soundBtn.setAttribute('aria-pressed', String(on));
+    soundBtn.querySelector('span').textContent = on ? 'Sound on' : 'Sound off';
+    soundBtn.querySelector('.wave').style.display = on ? '' : 'none';
+    soundBtn.querySelector('.mute').style.display = on ? 'none' : '';
+  }
+  function tick() {
+    if (v.duration) bar.style.transform = 'scaleX(' + (v.currentTime / v.duration) + ')';
+    if (!v.paused) raf = requestAnimationFrame(tick);
+  }
+  function wake() {
+    screen.classList.remove('idle');
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(() => { if (!v.paused) screen.classList.add('idle'); }, 2600);
+  }
+
+  v.addEventListener('play', () => { setState(); cancelAnimationFrame(raf); tick(); wake(); });
+  v.addEventListener('pause', () => { setState(); cancelAnimationFrame(raf); screen.classList.remove('idle'); });
+  v.addEventListener('volumechange', setState);
+
+  playBtn.addEventListener('click', (e) => { e.stopPropagation(); if (v.paused) { userPaused = false; play(); } else { userPaused = true; v.pause(); } });
+  bigPlay.addEventListener('click', (e) => { e.stopPropagation(); userPaused = false; play(); });
+  soundBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    v.muted = !v.muted;
+    if (!v.muted && v.paused) { userPaused = false; play(); }
+  });
+  fsBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    load();
+    v.muted = false;
+    if (v.requestFullscreen) v.requestFullscreen().catch(() => {});
+    else if (v.webkitEnterFullscreen) v.webkitEnterFullscreen();
+    if (v.paused) { userPaused = false; play(); }
+  });
+  v.addEventListener('click', () => { if (v.paused) { userPaused = false; play(); } else { userPaused = true; v.pause(); } });
+  screen.addEventListener('pointermove', wake);
+  screen.addEventListener('touchstart', wake, { passive: true });
+
+  // Play only while the video is on screen (saves battery and data)
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(([e]) => {
+      visible = e.isIntersecting;
+      if (visible && !userPaused) play();
+      else if (!visible && !v.paused) v.pause();
+    }, { threshold: 0.25 }).observe(screen);
+  } else if (!userPaused) play();
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) v.pause();
+    else if (visible && !userPaused) play();
+  });
+  setState();
+})();
+
+/* ---------- Share ---------- */
 let toastTimer;
 function toast(msg) {
   const t = $('toast');
@@ -495,21 +897,17 @@ function toast(msg) {
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
 }
-
 $('shareBtn').addEventListener('click', async () => {
-  const data = { title: CONFIG.name, text: CONFIG.name, url: location.href };
+  const data = { title: 'LFT · Lift more. Tap less.', text: 'Zero-friction gym tracking.', url: location.href };
   if (navigator.share) {
-    try { await navigator.share(data); } catch (e) { /* user cancelled */ }
+    try { await navigator.share(data); } catch (e) { /* cancelled */ }
     return;
   }
-  try {
-    await navigator.clipboard.writeText(location.href);
-    toast('Link copied');
-  } catch (e) {
-    toast('Copy the link from the address bar');
-  }
+  try { await navigator.clipboard.writeText(location.href); toast('Link copied'); }
+  catch (e) { toast('Copy the link from the address bar'); }
 });
 
+/* ---------- Open social apps directly on phones ---------- */
 function openInApp(link) {
   if (isAndroid && link.android && link.androidPackage) {
     const scheme = link.android.split('://')[0];
@@ -518,13 +916,9 @@ function openInApp(link) {
       ';S.browser_fallback_url=' + encodeURIComponent(link.web) + ';end';
     return true;
   }
-  if (isIOS && link.ios) {
-    openIOSApp(link.ios, link.web);
-    return true;
-  }
+  if (isIOS && link.ios) { openIOSApp(link.ios, link.web); return true; }
   return false;
 }
-
 function openIOSApp(scheme, webUrl) {
   const start = Date.now();
   let left = false;
